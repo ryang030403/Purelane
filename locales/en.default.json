@@ -528,5 +528,31 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+    },
+  "purelane": {
+    "hero": {
+      "carousel": "carousel",
+      "slide": "slide",
+      "slide_position": "{{ index }} of {{ count }}",
+      "show_slide": "Show slide {{ index }}",
+      "pause": "Pause slideshow",
+      "play": "Play slideshow"
+    },
+    "reviews": {
+      "pause": "Pause scrolling reviews",
+      "play": "Play scrolling reviews",
+      "verified": "Verified purchase",
+      "editor_empty": "No reviews yet. Add entries under Content > Metaobjects > Review, or pick reviews in this section's settings."
+    },
+    "bundles": {
+      "product_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      },
+      "editor_empty": "Pick a bundle product for this block. Bundle contents come from the product's \"Bundle items\" metafield."
+    },
+    "grid": {
+      "editor_empty": "Choose a collection in this section's settings to show products."
+    }
   }
 }
