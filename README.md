@@ -1,99 +1,105 @@
-# Dawn
+# Purelane on Shopify (Dawn)
 
-[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)
+The Purelane prototype homepage (`reference/purelane-homepage.html`) rebuilt as production
+sections on stock Dawn v16.0.0:
 
-[Getting started](#getting-started) |
-[Staying up to date with Dawn changes](#staying-up-to-date-with-dawn-changes) |
-[Developer tools](#developer-tools) |
-[Contributing](#contributing) |
-[Code of conduct](#code-of-conduct) |
-[Theme Store submission](#theme-store-submission) |
-[License](#license)
+| # | Section | File | Anchor |
+|---|---|---|---|
+| 01 | Hero | `sections/pl-hero.liquid` | – |
+| 02 | Shop / product grid | `sections/pl-product-grid.liquid` | `#shop` |
+| 03 | Best-selling combos | `sections/pl-combos.liquid` | `#combos` |
+| 04 | Bundles | `sections/pl-bundles.liquid` | `#bundles` |
+| 05 | Reviews rail | `sections/pl-reviews.liquid` | `#reviews` |
+| – | Water backdrop (shared) | `sections/pl-backdrop.liquid` | – |
 
-Dawn represents a HTML-first, JavaScript-only-as-needed approach to theme development. It's Shopify's first source available theme with performance, flexibility, and [Online Store 2.0 features](https://www.shopify.com/partners/blog/shopify-online-store) built-in and acts as a reference for building Shopify themes.
+Build notes, what was flagged in the original file, and the AI workflow notes are in
+**[NOTES.md](NOTES.md)**.
 
-* **Web-native in its purest form:** Themes run on the [evergreen web](https://www.w3.org/2001/tag/doc/evergreen-web/). We leverage the latest web browsers to their fullest, while maintaining support for the older ones through progressive enhancement—not polyfills.
-* **Lean, fast, and reliable:** Functionality and design defaults to “no” until it meets this requirement. Code ships on quality. Themes must be built with purpose. They shouldn’t support each and every feature in Shopify.
-* **Server-rendered:** HTML must be rendered by Shopify servers using Liquid. Business logic and platform primitives such as translations and money formatting don’t belong on the client. Async and on-demand rendering of parts of the page is OK, but we do it sparingly as a progressive enhancement.
-* **Functional, not pixel-perfect:** The Web doesn’t require each page to be rendered pixel-perfect by each browser engine. Using semantic markup, progressive enhancement, and clever design, we ensure that themes remain functional regardless of the browser.
+## What changed in Dawn
 
-You can find a more detailed version of our theme code principles in the [contribution guide](https://github.com/Shopify/dawn/blob/main/.github/CONTRIBUTING.md#theme-code-principles).
+Two lines. `layout/theme.liquid` renders `snippets/pl-head.liquid` before `</head>`. Everything
+else is new `pl-*` files, plus a `purelane.*` block in `locales/en.default.json` and the homepage
+template. The first commit is byte-identical to upstream Dawn v16.0.0, so `git diff 1f18434`
+shows the whole build.
 
-## Getting started
-We recommend using Dawn as a starting point for theme development. [Learn more on Shopify.dev](https://shopify.dev/themes/getting-started/create).
+```
+sections/pl-*.liquid        the five sections + backdrop
+snippets/pl-*.liquid        shared: head, icon, rule, section head, price, product media,
+                            add to cart (Dawn <product-form>), stars, product card
+assets/pl-*.css|js          one CSS file per section, small deferred custom elements
+assets/pl-*.woff2           self-hosted Outfit + Inter (latin) + Inter ₹ subset
+assets/pl-water-*.svg       backdrop layers, extracted from the prototype by script
+store-seed/                 data.json (single source of truth), images, seed.mjs
+tools/                      extraction, rasterising, theme-check, preview + comparison harness
+reference/                  the prototype, byte-for-byte as delivered
+```
 
-> If you're building a theme for the Shopify Theme Store, then you can use Dawn as a starting point. However, the theme that you submit needs to be [substantively different from Dawn](https://shopify.dev/themes/store/requirements#uniqueness) so that it provides added value for merchants. Learn about the [ways that you can use Dawn](https://shopify.dev/themes/tools/dawn#ways-to-use-dawn).
+## Data model
 
-Please note that the main branch may include code for features not yet released. The "stable" version of Dawn is available in the theme store.
+Everything product-related comes from Shopify. Where no native field exists:
 
-## Staying up to date with Dawn changes
+**Product metafields** (namespace `custom`, all pinned in admin)
 
-Say you're building a new theme off Dawn but you still want to be able to pull in the latest changes, you can add a remote `upstream` pointing to this Dawn repository.
+| Key | Type | Used by | Purpose |
+|---|---|---|---|
+| `custom.badge` | Single line text | Product grid | Card pill ("Best seller", "New"). "Sold out" replaces it automatically. |
+| `custom.benefit` | Single line text | Combos | One-line benefit under each item in a box. A combo block can override it per item. |
+| `custom.cutout_image` | File (image) | Hero | Tall bottle-only image for the price stage. Falls back to the featured image. |
+| `custom.bundle_items` | List of products | Combos, Bundles | What is in a bundle, in display order. |
+| `custom.bundle_size` | Integer (min 1) | Combos, Bundles | "Pick any N" size. Falls back to the number of bundle items. |
+| `custom.summary` | Multi-line text | Combos | Short card copy. Falls back to the product description. |
 
-1. Navigate to your local theme folder.
-2. Verify the list of remotes and validate that you have both an `origin` and `upstream`:
+**Standard product metafields:** `reviews.rating` and `reviews.rating_count`, the ones review apps
+(Judge.me, Okendo and others) already write. They drive the card rating.
+
+**Metaobject** `customer_review` (storefront access: public read)
+
+| Field | Type |
+|---|---|
+| `rating` | Rating (1–5), required |
+| `title` | Single line text |
+| `body` | Multi-line text, required |
+| `author` | Single line text, required |
+| `verified` | Boolean |
+| `product` | Product reference |
+| `product_label` | Single line text (short name on the card; defaults to the product title) |
+
+Combos and "pick any N" tiers are **real products** (e.g. "Kitchen essentials" ₹499, compare-at
+₹897), so price, saving, stock and link all come from the platform. Savings, percentages and
+"₹174 per product" are calculated in Liquid, never typed.
+
+## Setup
+
+1. **Store:** Partner account → development store on Dawn. In *Settings → General*, set the
+   currency to **INR** and the money format ("HTML without currency") to `₹{{amount}}`.
+2. **API access:** create an app in the Dev Dashboard, install it on the dev store with scopes
+   `write_products, write_files, write_metaobject_definitions, write_metaobjects,
+   write_publications, write_inventory`.
+3. **Seed:**
+   ```sh
+   npm install
+   SHOPIFY_STORE=your-store.myshopify.com SHOPIFY_ADMIN_TOKEN=shpat_... npm run seed
+   # or SHOPIFY_CLIENT_ID=... SHOPIFY_CLIENT_SECRET=... npm run seed
+   ```
+   It creates the definitions above, 12 products (one sold out, one with no image, one with a
+   106-character title), 8 bundle products, the `bestsellers` collection and 5 reviews. It is safe to
+   re-run.
+4. **Theme:** `shopify theme push` (or `shopify theme dev`). `templates/index.json` already wires
+   the sections to the seeded handles.
+
+**Manual alternative to step 3:** create the definitions in *Settings → Custom data* as in the
+tables above, add products, and fill the metafields. `store-seed/data.json` holds the exact content.
+
+## Checks
+
 ```sh
-git remote -v
-```
-3. If you don't see an `upstream`, you can add one that points to Shopify's Dawn repository:
-```sh
-git remote add upstream https://github.com/Shopify/dawn.git
-```
-4. Pull in the latest Dawn changes into your repository:
-```sh
-git fetch upstream
-git pull upstream main
+npm run check       # Shopify theme-check (0 errors; only stock Dawn's 9 warnings remain)
+npm run preview     # render the real sections locally (LiquidJS + seed data) at :8377
+npm run compare     # prototype vs build, 375/768/1024/1440 → tools/preview/out/compare/
+npm run behaviour   # motion on: reveal, slideshow, marquee, CLS, focus order, editor events
 ```
 
-## Developer tools
+The preview harness is not Shopify. It shims Shopify-only tags and filters so layout and
+behaviour can be checked without a store. The store is the real test (see the gaps in NOTES.md).
 
-There are a number of really useful tools that the Shopify Themes team uses during development. Dawn is already set up to work with these tools.
-
-### Shopify CLI
-
-[Shopify CLI](https://github.com/Shopify/shopify-cli) helps you build Shopify themes faster and is used to automate and enhance your local development workflow. It comes bundled with a suite of commands for developing Shopify themes—everything from working with themes on a Shopify store (e.g. creating, publishing, deleting themes) or launching a development server for local theme development.
-
-You can follow this [quick start guide for theme developers](https://shopify.dev/docs/themes/tools/cli) to get started.
-
-### Theme Check
-
-We recommend using [Theme Check](https://github.com/shopify/theme-check) as a way to validate and lint your Shopify themes.
-
-We've added Theme Check to Dawn's [list of VS Code extensions](/.vscode/extensions.json) so if you're using Visual Studio Code as your code editor of choice, you'll be prompted to install the [Theme Check VS Code](https://marketplace.visualstudio.com/items?itemName=Shopify.theme-check-vscode) extension upon opening VS Code after you've forked and cloned Dawn.
-
-You can also run it from a terminal with the following Shopify CLI command:
-
-```bash
-shopify theme check
-```
-
-### Continuous Integration
-
-Dawn uses [GitHub Actions](https://github.com/features/actions) to maintain the quality of the theme. [This is a starting point](https://github.com/Shopify/dawn/blob/main/.github/workflows/ci.yml) and what we suggest to use in order to ensure you're building better themes. Feel free to build off of it!
-
-#### Shopify/lighthouse-ci-action
-
-We love fast websites! Which is why we created [Shopify/lighthouse-ci-action](https://github.com/Shopify/lighthouse-ci-action). This runs a series of [Google Lighthouse](https://developers.google.com/web/tools/lighthouse) audits for the home, product and collections pages on a store to ensure code that gets added doesn't degrade storefront performance over time.
-
-#### Shopify/theme-check-action
-
-Dawn runs [Theme Check](#Theme-Check) on every commit via [Shopify/theme-check-action](https://github.com/Shopify/theme-check-action).
-
-## Contributing
-
-Want to make commerce better for everyone by contributing to Dawn? We'd love your help! Please read our [contributing guide](https://github.com/Shopify/dawn/blob/main/.github/CONTRIBUTING.md) to learn about our development process, how to propose bug fixes and improvements, and how to build for Dawn.
-
-## Code of conduct
-
-All developers who wish to contribute through code or issues, please first read our [Code of Conduct](https://github.com/Shopify/dawn/blob/main/.github/CODE_OF_CONDUCT.md).
-
-## Theme Store submission
-
-The [Shopify Theme Store](https://themes.shopify.com/) is the place where Shopify merchants find the themes that they'll use to showcase and support their business. As a theme partner, you can create themes for the Shopify Theme Store and reach an international audience of an ever-growing number of entrepreneurs.
-
-Ensure that you follow the list of [theme store requirements](https://shopify.dev/themes/store/requirements) if you're interested in becoming a [Shopify Theme Partner](https://themes.shopify.com/services/themes/guidelines) and building themes for the Shopify platform.
-
-## License
-
-Copyright (c) 2021-present Shopify Inc. See [LICENSE](/LICENSE.md) for further details.
+Dawn is © Shopify, MIT licensed (`LICENSE.md`). Outfit and Inter are under the SIL Open Font License.
