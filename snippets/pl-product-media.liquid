@@ -1,0 +1,70 @@
+{% comment %}
+  Product cut-out image, sized by HEIGHT like the prototype (every product
+  shot is a fixed height with its width following the image's ratio).
+  Falls back to a dashed leaf tile when there is no image, which is a real
+  merchant state (see "Fabric conditioner" in the laundry combo).
+
+  Accepts:
+  - image: {Object} image to show (optional; falls back to product.featured_image)
+  - product: {Object} product, used for the fallback image and alt text (optional)
+  - height: {Number} rendered CSS height in px at its largest breakpoint; used
+    to build an exact srcset (required unless sizes is passed)
+  - sizes: {String} explicit sizes attribute (optional; overrides height)
+  - class: {String} classes for the img (optional)
+  - tile_class: {String} classes for the no-image tile (optional)
+  - loading: {String} 'lazy' | 'eager' (optional, default 'lazy')
+  - priority: {Boolean} fetchpriority=high, for the LCP image (optional)
+  - decorative: {Boolean} empty alt, when the product name is already adjacent (optional)
+
+  Usage:
+  {% render 'pl-product-media', product: product, height: 122, class: 'pl-card__img' %}
+{% endcomment %}
+{%- liquid
+  assign img = image | default: product.featured_image
+  assign loading = loading | default: 'lazy'
+-%}
+{%- if img != blank -%}
+  {%- liquid
+    if decorative
+      assign alt = ''
+    else
+      assign alt = img.alt | default: product.title | escape
+    endif
+
+    if sizes == blank
+      assign display_w = height | times: img.aspect_ratio | ceil
+      assign sizes = display_w | append: 'px'
+      assign w2 = display_w | times: 2
+      assign w3 = display_w | times: 3
+      assign widths = display_w | append: ',' | append: w2 | append: ',' | append: w3
+    else
+      assign widths = '165,250,360,480,640,800,1000,1200'
+    endif
+  -%}
+  {%- if priority -%}
+    {{
+      img
+      | image_url: width: 1200
+      | image_tag:
+        widths: widths,
+        sizes: sizes,
+        loading: 'eager',
+        fetchpriority: 'high',
+        alt: alt,
+        class: class
+    }}
+  {%- else -%}
+    {{
+      img
+      | image_url: width: 1200
+      | image_tag: widths: widths, sizes: sizes, loading: loading, decoding: 'async', alt: alt, class: class
+    }}
+  {%- endif -%}
+{%- else -%}
+  <span class="pl-tile {{ tile_class }}">
+    {%- render 'pl-icon', name: 'leaf' -%}
+    {%- unless decorative -%}
+      <span class="visually-hidden">{{ product.title | escape }}</span>
+    {%- endunless -%}
+  </span>
+{%- endif -%}

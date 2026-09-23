@@ -1,0 +1,53 @@
+{% comment %}
+  Purelane: global head assets for the pl-* sections.
+  Rendered once from layout/theme.liquid, right before </head>.
+
+  - Fonts are self-hosted (latin variable woff2) instead of Google Fonts:
+    no third-party connection on the critical path, and font-display: swap.
+    Outfit has no rupee glyph, so prices set in Outfit fall back to system-ui
+    exactly as they did in the prototype. Inter gets a tiny currency-only
+    subset so ₹ in body copy matches the prototype.
+  - pl-base.css holds tokens and primitives shared by every pl-* section.
+  - The pl-motion class gates the scroll-reveal "hidden" state, so content
+    is never hidden when JS, IntersectionObserver, or motion are unavailable.
+{% endcomment %}
+{%- style -%}
+  @font-face {
+    font-family: 'Outfit';
+    src: url('{{ 'pl-outfit.woff2' | asset_url }}') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('{{ 'pl-inter.woff2' | asset_url }}') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+      U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('{{ 'pl-inter-currency.woff2' | asset_url }}') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+20A0-20C0;
+  }
+{%- endstyle -%}
+{%- if request.page_type == 'index' -%}
+  {% comment %}Preload only where the hero (the LCP text) lives; @font-face alone is lazy elsewhere.{% endcomment %}
+  {% comment %}theme-check-disable AssetPreload{% endcomment %}
+  <link rel="preload" as="font" href="{{ 'pl-outfit.woff2' | asset_url }}" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="{{ 'pl-inter.woff2' | asset_url }}" type="font/woff2" crossorigin>
+  {% comment %}theme-check-enable AssetPreload{% endcomment %}
+{%- endif -%}
+{{ 'pl-base.css' | asset_url | stylesheet_tag }}
+<script>
+  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('pl-motion');
+  }
+</script>
+<script src="{{ 'pl-base.js' | asset_url }}" defer="defer"></script>

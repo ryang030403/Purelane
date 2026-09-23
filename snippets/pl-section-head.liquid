@@ -1,0 +1,29 @@
+{% comment %}
+  Centred section head used by the product grid, combos and bundles:
+  kicker, heading, optional leaf rule, optional lede.
+
+  Accepts:
+  - kicker: {String}
+  - heading: {String}
+  - lede: {String} (optional)
+  - show_rule: {Boolean}
+  - heading_id: {String} id for aria-labelledby on the section (optional)
+  - class: {String} extra classes (optional)
+
+  Usage:
+  {% render 'pl-section-head', kicker: section.settings.kicker, heading: section.settings.heading, show_rule: true %}
+{% endcomment %}
+<div class="pl-head {{ class }}">
+  {%- if kicker != blank -%}
+    <span class="pl-kicker">{{ kicker | escape }}</span>
+  {%- endif -%}
+  {%- if heading != blank -%}
+    <h2 class="pl-d2"{% if heading_id %} id="{{ heading_id }}"{% endif %}>{{ heading | escape }}</h2>
+  {%- endif -%}
+  {%- if show_rule -%}
+    {%- render 'pl-rule' -%}
+  {%- endif -%}
+  {%- if lede != blank -%}
+    <p class="pl-lede">{{ lede | escape }}</p>
+  {%- endif -%}
+</div>
