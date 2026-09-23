@@ -23,12 +23,20 @@ if (!customElements.get('pl-hero')) {
         // Reasons autoplay is currently held; it runs only when this is empty.
         this.holds = new Set(this.reduce ? ['motion'] : []);
 
+        this.onFit = () => {
+          const top = this.getBoundingClientRect().top + window.scrollY;
+          if (top < window.innerHeight) this.style.setProperty('--pl-hero-top', `${top}px`);
+          else this.style.removeProperty('--pl-hero-top');
+        };
+        window.addEventListener('resize', this.onFit);
+
         this.setupSlides();
         this.setupParallax();
       }
 
       disconnectedCallback() {
         this.stop();
+        window.removeEventListener('resize', this.onFit);
         if (this.io) this.io.disconnect();
         window.removeEventListener('scroll', this.onScroll);
         window.removeEventListener('resize', this.onResize);

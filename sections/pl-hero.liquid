@@ -21,6 +21,17 @@
   data-interval="{{ section.settings.interval | times: 1000 }}"
   style="--pl-hero-gap: {{ section.settings.gap_top }}px;"
 >
+  {%- comment -%}
+    Fill the rest of the first screen. Measured synchronously, before the
+    hero content paints, so the bottom-aligned copy never jumps (CLS);
+    Dawn's own --header-height is only set later by deferred JS.
+  {%- endcomment -%}
+  <script>
+    (function (el) {
+      var top = el.getBoundingClientRect().top + window.scrollY;
+      if (top < window.innerHeight) el.style.setProperty('--pl-hero-top', top + 'px');
+    })(document.currentScript.parentElement);
+  </script>
   <div class="pl-hero__grid">
     {%- if badges.size > 0 -%}
       <ul class="pl-hero__badges pl-glass-2" aria-label="{{ section.settings.badges_label | escape }}">
