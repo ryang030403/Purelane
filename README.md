@@ -13,7 +13,8 @@ sections on stock Dawn v16.0.0:
 | – | Water backdrop (shared) | `sections/pl-backdrop.liquid` | – |
 
 Build notes, what was flagged in the original file, and the AI workflow notes are in
-**[NOTES.md](NOTES.md)**.
+**[NOTES.md](NOTES.md)**. Test results with screenshots and before/after evidence are in
+**[docs/qa/REPORT.md](docs/qa/REPORT.md)**.
 
 ## What changed in Dawn
 
