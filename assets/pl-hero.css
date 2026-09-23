@@ -1,0 +1,402 @@
+/* ==========================================================================
+   Purelane hero. Resolved from the prototype's .hero / .hstage / .ptag /
+   .badges / .badgestrip rules (V1 + V2).
+
+   The prototype's header was position:fixed over the hero, so the hero used
+   min-height:100svh and a 150px top padding to clear it. On Dawn the header
+   is in flow, so the hero fills the rest of the first screen instead
+   (Dawn publishes --header-height) and the top padding becomes the visible
+   gap under the header (--pl-hero-gap, a section setting, 52px by default;
+   the per-breakpoint offsets reproduce the prototype's 150/132/118px).
+   ========================================================================== */
+
+.pl-hero {
+  min-height: calc(100svh - var(--header-height, 0px));
+  display: flex;
+  align-items: flex-end;
+  padding: var(--pl-hero-gap) 0 var(--pl-sec-y);
+}
+.pl-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    102deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0.5) 30%,
+    rgba(255, 255, 255, 0.12) 54%,
+    transparent 68%
+  );
+}
+.pl-hero__grid {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--pl-maxw);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+.pl-hero__copy {
+  position: relative;
+  z-index: 3;
+  max-width: 600px;
+}
+.pl-hero__title {
+  margin-bottom: 20px;
+}
+.pl-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px;
+  margin-top: 26px;
+}
+
+/* ---------- product stage ---------- */
+.pl-hero__prod {
+  position: absolute;
+  right: 2%;
+  bottom: 28px;
+  z-index: 2;
+  width: min(50vw, 560px);
+  /* PERF: the prototype also animated this filter forever with the Web
+     Animations API (54px -> 68px blur), repainting a 560px layer every
+     frame. The static shadow is kept; the pulse is dropped. */
+  filter: drop-shadow(0 34px 54px rgba(2, 20, 19, 0.6));
+}
+.pl-hstage {
+  position: relative;
+  width: 100%;
+  height: clamp(380px, 74svh, 680px);
+}
+.pl-hslide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding-right: 2%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.85s var(--pl-ease);
+}
+.pl-hslide.is-on {
+  opacity: 1;
+}
+
+/* Sizing is height driven: each bottle gets a height, width follows its ratio. */
+.pl-hp {
+  position: relative;
+  flex: 0 0 auto;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  opacity: 0;
+  transform: translateY(28px) scale(0.94);
+  transition: opacity 0.8s var(--pl-ease), transform 0.8s var(--pl-ease);
+  filter: drop-shadow(0 14px 22px rgba(0, 74, 66, 0.15));
+}
+.pl-hslide.is-on .pl-hp {
+  opacity: 1;
+  transform: none;
+}
+.pl-hslide.is-on .pl-hp--d1 {
+  transition-delay: 0.06s;
+}
+.pl-hslide.is-on .pl-hp--d2 {
+  transition-delay: 0.3s;
+}
+.pl-hslide.is-on .pl-hp--d3 {
+  transition-delay: 0.54s;
+}
+.pl-hp--placeholder {
+  width: 60%;
+  fill: rgba(75, 58, 143, 0.35);
+}
+
+/* one product, full stage height */
+.pl-hs1 .pl-hp--a {
+  height: 100%;
+  z-index: 3;
+}
+/* two products */
+.pl-hs2 .pl-hp--a {
+  height: 80%;
+  margin-right: -8%;
+  z-index: 1;
+}
+.pl-hs2 .pl-hp--b {
+  height: 97%;
+  z-index: 3;
+}
+/* three products, tight combo grouping (DOM order is already left, centre, right) */
+.pl-hs3 .pl-hp--a {
+  height: 75%;
+  margin-right: -8%;
+  z-index: 1;
+}
+.pl-hs3 .pl-hp--c {
+  height: 97%;
+  z-index: 3;
+}
+.pl-hs3 .pl-hp--b {
+  height: 79%;
+  margin-left: -8%;
+  z-index: 2;
+}
+
+/* ---------- price flag ---------- */
+.pl-ptag {
+  position: absolute;
+  left: 0;
+  bottom: 2%;
+  z-index: 6;
+  max-width: 52%;
+  padding: 11px 14px 12px;
+  border-radius: 16px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.8s var(--pl-ease) 0.62s, transform 0.8s var(--pl-ease) 0.62s;
+}
+.pl-hslide.is-on .pl-ptag {
+  opacity: 1;
+  transform: none;
+}
+.pl-ptag__lbl {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1.62;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--pl-accent-text);
+}
+.pl-ptag__val {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin-top: 5px;
+}
+.pl-ptag__val strong {
+  font-family: var(--pl-font-display);
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--pl-surface);
+}
+.pl-ptag__val s {
+  font-size: 12px;
+  color: var(--pl-paper-3);
+}
+.pl-ptag__cut {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 8.4px;
+  font-weight: 800;
+  line-height: 1.62;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  background: rgba(201, 118, 29, 0.16);
+  border: 1px solid rgba(201, 118, 29, 0.36);
+  color: var(--pl-leaf);
+}
+
+/* ---------- stage controls ---------- */
+.pl-hdots {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+}
+.pl-hdots__dot {
+  position: relative;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(75, 58, 143, 0.22);
+  transition: 0.4s var(--pl-ease);
+}
+/* A11Y: 6px dots are a tiny target; extend the hit area vertically without
+   moving anything. */
+.pl-hdots__dot::before {
+  content: '';
+  position: absolute;
+  inset: -9px -3px;
+}
+.pl-hdots__dot:hover {
+  background: rgba(75, 58, 143, 0.4);
+}
+.pl-hdots__dot.is-on {
+  width: 20px;
+  border-radius: 999px;
+  background: var(--pl-accent);
+}
+/* A11Y: WCAG 2.2.2 needs a way to stop auto-advancing content. Sits to the
+   right so the dots stay centred where the design put them. */
+.pl-hdots__toggle {
+  position: absolute;
+  right: 2%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translateY(-50%);
+}
+.pl-hdots__toggle svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* ---------- desktop badge rail ---------- */
+.pl-hero__badges {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  z-index: 4;
+  width: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 8px;
+  border-radius: 20px;
+  transform: translateY(-50%);
+  list-style: none;
+}
+.pl-badge {
+  text-align: center;
+  padding: 11px 4px;
+}
+.pl-badge + .pl-badge {
+  border-top: 1px solid rgba(75, 58, 143, 0.12);
+}
+.pl-badge__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(75, 58, 143, 0.16);
+  color: var(--pl-leaf);
+}
+.pl-badge__icon svg {
+  width: 19px;
+  height: 19px;
+}
+.pl-badge__label {
+  display: block;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 1.34;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--pl-paper-2);
+}
+
+/* ---------- mobile badge strip ---------- */
+.pl-hero__strip {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  list-style: none;
+}
+.pl-hero__strip li {
+  flex: 1;
+  padding: 11px 6px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 8.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pl-paper-2);
+}
+.pl-hero__strip svg {
+  width: 18px;
+  height: 18px;
+  margin: 0 auto 6px;
+  color: var(--pl-leaf);
+}
+
+/* ---------- breakpoints (prototype order preserved) ---------- */
+@media (min-width: 901px) {
+  .pl-hero__strip {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  .pl-hero__copy {
+    max-width: 470px;
+  }
+  .pl-hero__prod {
+    width: min(44vw, 440px);
+    right: 3%;
+  }
+}
+@media (max-width: 900px) {
+  .pl-hero {
+    padding-top: max(0px, calc(var(--pl-hero-gap) - 18px));
+  }
+  .pl-hero::before {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.62) 0%,
+      rgba(255, 255, 255, 0.34) 36%,
+      rgba(255, 255, 255, 0.66) 100%
+    );
+  }
+  .pl-hero__copy {
+    max-width: none;
+  }
+  .pl-hero__prod {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: min(88vw, 420px);
+    margin: 20px auto 0;
+  }
+  .pl-hero__badges {
+    display: none;
+  }
+  .pl-hstage {
+    height: clamp(300px, 44svh, 430px);
+  }
+  .pl-ptag {
+    max-width: 58%;
+    padding: 9px 12px 10px;
+    border-radius: 14px;
+  }
+  .pl-ptag__val strong {
+    font-size: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .pl-hero {
+    padding-top: max(0px, calc(var(--pl-hero-gap) - 32px));
+  }
+}
+@media (max-width: 600px) {
+  .pl-hero {
+    padding-top: max(0px, calc(var(--pl-hero-gap) - 26px));
+  }
+}
+@media (max-width: 420px) {
+  .pl-hero__strip li {
+    font-size: 8px;
+    padding: 9px 4px;
+  }
+  .pl-hero__strip svg {
+    width: 16px;
+    height: 16px;
+  }
+  .pl-hero__prod {
+    width: min(92vw, 360px);
+  }
+}
