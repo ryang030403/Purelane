@@ -1,0 +1,80 @@
+{
+  "edge cases": [
+    {
+      "title": "Organic dishwash liquid gel",
+      "pill": "",
+      "image": true,
+      "button": "Add to cart",
+      "disabled": false,
+      "titleLines": 1
+    },
+    {
+      "title": "Natural herbal floor cleaner",
+      "pill": "Sold out",
+      "image": true,
+      "button": "Sold out",
+      "disabled": true,
+      "titleLines": 2
+    },
+    {
+      "title": "Fabric conditioner",
+      "pill": "",
+      "image": false,
+      "button": "Add to cart",
+      "disabled": false,
+      "titleLines": 1
+    },
+    {
+      "title": "Coconut coir scrub pads for pots, pans, ",
+      "pill": "",
+      "image": true,
+      "button": "Add to cart",
+      "disabled": false,
+      "titleLines": 3
+    }
+  ],
+  "focused element names": "Add to cart, Kitchen cleaner, foaming",
+  "build marquee: one set vs half track (px)": [
+    1480,
+    1480
+  ],
+  "prototype marquee: one set vs half track (px)": [
+    1480,
+    1474
+  ],
+  "card height at 375 before/after (prototype 349.6)": [
+    361.53125,
+    349.5625
+  ],
+  "combo card width without Dawn inline rule, before/after (prototype 302)": [
+    304,
+    302
+  ],
+  "hero layout shift (Dawn header var set late)": [
+    {
+      "label": "before",
+      "cls": 0.0313,
+      "headlineMovedPx": 90
+    },
+    {
+      "label": "after",
+      "cls": 0,
+      "headlineMovedPx": 0
+    }
+  ],
+  "prototype shelf image size at 1440 (w x h)": "0 x 0",
+  "contrast on glass, prototype vs build": {
+    "kicker": [
+      3.76,
+      5.11
+    ],
+    "price label": [
+      3.56,
+      5.13
+    ],
+    "rating": [
+      3.56,
+      5.13
+    ]
+  }
+}
