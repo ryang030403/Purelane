@@ -1,0 +1,130 @@
+/* ==========================================================================
+   Purelane bundles. Resolved from the prototype's #bundles intro panel,
+   .tiers / .tier / .tierpix rules (V1 + V2).
+   ========================================================================== */
+
+.pl-bundles__intro {
+  margin-bottom: 16px;
+}
+
+.pl-tiers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  list-style: none;
+}
+.pl-tiers > li {
+  display: flex;
+  min-width: 0;
+}
+@media (min-width: 760px) {
+  .pl-tiers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pl-tier {
+  width: 100%;
+  padding: 24px 22px;
+}
+.pl-tier__tag {
+  margin-bottom: 14px;
+  letter-spacing: 0.16em;
+}
+
+.pl-tierpix {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  height: 78px;
+  margin: -4px 0 16px;
+  padding: 8px 6px;
+  border-radius: 14px;
+  background: linear-gradient(162deg, rgba(255, 255, 255, 0.54), rgba(236, 230, 247, 0.34));
+  border: 1px solid rgba(75, 58, 143, 0.11);
+}
+.pl-tierpix__img {
+  height: 62px;
+  filter: drop-shadow(0 5px 8px rgba(0, 74, 66, 0.13));
+}
+.pl-tierpix--many .pl-tierpix__img {
+  height: 54px;
+}
+.pl-tierpix__tile {
+  width: 38px;
+  height: 54px;
+}
+
+.pl-tier__qty {
+  font-family: var(--pl-font-display);
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--pl-surface);
+}
+.pl-tier__qty small {
+  display: block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--pl-paper-3);
+}
+.pl-tier__price {
+  margin: 16px 0 4px;
+  font-family: var(--pl-font-display);
+  font-size: 27px;
+  font-weight: 700;
+  color: var(--pl-accent);
+}
+.pl-tier__price strong {
+  font-weight: inherit;
+}
+.pl-tier__price s {
+  /* The design had a space plus 8px; the space is ~6px at this size. */
+  margin-left: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--pl-paper-3);
+}
+.pl-tier__per {
+  font-size: 12px;
+}
+
+.pl-tier__list {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 20px;
+  list-style: none;
+}
+.pl-tier__list li {
+  display: flex;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--pl-paper-2);
+}
+.pl-tier__list svg {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  color: var(--pl-leaf);
+}
+
+@media (max-width: 760px) {
+  .pl-tier__qty {
+    font-size: 44px;
+  }
+  .pl-tierpix {
+    height: 70px;
+  }
+  .pl-tierpix__img {
+    height: 54px;
+  }
+  .pl-tierpix--many .pl-tierpix__img {
+    height: 46px;
+  }
+}
