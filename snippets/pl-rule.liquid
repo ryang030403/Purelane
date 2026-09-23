@@ -1,0 +1,14 @@
+{% comment %}
+  Purelane divider: hairline, leaf, hairline. Purely decorative.
+
+  Accepts:
+  - class: {String} extra classes (optional)
+
+  Usage:
+  {% render 'pl-rule', class: 'pl-rv pl-rv-d1' %}
+{% endcomment %}
+<div class="pl-rule {{ class }}" aria-hidden="true">
+  <i></i>
+  {%- render 'pl-icon', name: 'leaf' -%}
+  <i></i>
+</div>

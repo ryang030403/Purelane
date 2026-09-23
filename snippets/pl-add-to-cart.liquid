@@ -1,0 +1,68 @@
+{% comment %}
+  Add-to-cart for Purelane cards. Uses Dawn's own <product-form> element, so
+  the cart drawer / notification, cart count and error handling behave
+  exactly like the rest of the theme. The section must load product-form.js.
+
+  States:
+  - sold out            -> disabled button
+  - multiple variants   -> link to the product ("Choose options")
+  - single variant      -> AJAX add to cart
+
+  Accepts:
+  - product: {Object} (required)
+  - section_id: {String} (required) for unique ids and Dawn's section rendering
+  - labelled_by: {String} id of the product title, so screen readers hear
+    "Add to cart, Kitchen cleaner" instead of eight identical buttons (optional)
+  - class: {String} button classes (optional)
+  - label: {String} override for the add-to-cart text (optional)
+
+  Usage:
+  {% render 'pl-add-to-cart', product: product, section_id: section.id, class: 'pl-btn pl-btn--ghost pl-btn--sm pl-btn--block' %}
+{% endcomment %}
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'pl-atc-' | append: section_id | append: '-' | append: product.id
+  assign label = label | default: 'products.product.add_to_cart' | t
+-%}
+{%- if product.available == false -%}
+  <button
+    type="button"
+    class="{{ class }}"
+    disabled
+    {% if labelled_by %}
+      aria-describedby="{{ labelled_by }}"
+    {% endif %}
+  >
+    {{- 'products.product.sold_out' | t -}}
+  </button>
+{%- elsif product.has_only_default_variant == false -%}
+  <a
+    href="{{ product.url }}"
+    class="{{ class }}"
+    {% if labelled_by %}
+      aria-describedby="{{ labelled_by }}"
+    {% endif %}
+  >
+    {{- 'products.product.choose_options' | t -}}
+  </a>
+{%- else -%}
+  <product-form data-section-id="{{ section_id }}" data-hide-errors="true">
+    {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ variant.id }}">
+      <button
+        id="{{ form_id }}-submit"
+        type="submit"
+        name="add"
+        class="{{ class }}"
+        {% if labelled_by %}
+          aria-labelledby="{{ form_id }}-submit {{ labelled_by }}"
+        {% endif %}
+        aria-live="polite"
+      >
+        <span>{{ label }}</span>
+        <span class="sold-out-message hidden">{{ 'products.product.sold_out' | t }}</span>
+        {%- render 'loading-spinner' -%}
+      </button>
+    {%- endform -%}
+  </product-form>
+{%- endif -%}

@@ -1,0 +1,56 @@
+{% comment %}
+  Purelane line icons (24x24, currentColor stroke), lifted from the prototype.
+
+  Accepts:
+  - name: {String} leaf | shield | ban | heart | package | globe | truck | star | arrow | check | pause | play
+  - stroke: {Number} stroke width (optional, default 1.6)
+
+  Always decorative: pair with visible or visually-hidden text.
+
+  Usage:
+  {% render 'pl-icon', name: 'leaf' %}
+{% endcomment %}
+{%- liquid
+  assign default_stroke = 1.6
+  if name == 'arrow'
+    assign default_stroke = 2.2
+  endif
+  assign stroke = stroke | default: default_stroke
+-%}
+<svg
+  aria-hidden="true"
+  focusable="false"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="{{ stroke }}"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  {%- case name -%}
+    {%- when 'leaf' -%}
+      <path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/><path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/>
+    {%- when 'shield' -%}
+      <path d="M12 3 4.5 6v6.2c0 4.3 3.1 7.6 7.5 8.8 4.4-1.2 7.5-4.5 7.5-8.8V6L12 3Z"/><path d="m9 12 2.2 2.2L15.4 10"/>
+    {%- when 'ban' -%}
+      <circle cx="12" cy="12" r="8.4"/><path d="M6.4 17.6 17.6 6.4"/>
+    {%- when 'heart' -%}
+      <path d="M12 20s-7-4.4-7-9.4A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7 2.6c0 5-7 9.4-7 9.4Z"/>
+    {%- when 'package' -%}
+      <path d="M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M4 8 6.5 3h11L20 8M9.5 12h5"/>
+    {%- when 'globe' -%}
+      <circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2M12 3.4c2.4 2.4 3.6 5.4 3.6 8.6S14.4 18.2 12 20.6c-2.4-2.4-3.6-5.4-3.6-8.6S9.6 5.8 12 3.4Z"/>
+    {%- when 'truck' -%}
+      <path d="M2.6 16.4V7.2h10.2v9.2"/><path d="M12.8 10.4h4l3.6 3.2v2.8h-7.6"/><circle cx="6.6" cy="18" r="1.9"/><circle cx="16.6" cy="18" r="1.9"/>
+    {%- when 'star' -%}
+      <path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8L3.6 9.7l5.8-.8Z"/>
+    {%- when 'arrow' -%}
+      <path d="M5 12h13m-5-6 6 6-6 6"/>
+    {%- when 'check' -%}
+      <path d="m5 13 4 4L19 7"/>
+    {%- when 'pause' -%}
+      <path d="M8 5v14M16 5v14"/>
+    {%- when 'play' -%}
+      <path d="M7 4.8v14.4L19 12 7 4.8Z" fill="currentColor"/>
+  {%- endcase -%}
+</svg>

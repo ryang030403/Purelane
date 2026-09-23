@@ -1,0 +1,61 @@
+{% comment %}
+  Price trio used by every Purelane card: price, struck compare-at price,
+  and an optional saving label. All numbers come from the product; the
+  saving is calculated, never typed in.
+
+  Accepts:
+  - product: {Object} product (required)
+  - save: {String} 'percent' | 'amount' | 'none' (optional, default 'none')
+  - save_template: {String} label text; [saving] is replaced with the value,
+    e.g. "[saving] off" or "Save [saving]" (optional, default "[saving]")
+  - save_tag: {String} element for the saving label (optional, default 'em')
+  - save_class: {String} class for the saving label (optional)
+  - part: {String} 'prices' (price + compare only) | 'saving' (label only);
+    blank renders everything (optional)
+
+  Output is inline (strong, s, em) so each card lays it out with its own CSS.
+
+  Usage:
+  {% render 'pl-price', product: product, save: 'percent', save_template: '[saving] off' %}
+{% endcomment %}
+{%- liquid
+  assign save = save | default: 'none'
+  assign save_tag = save_tag | default: 'em'
+  assign save_template = save_template | default: '[saving]'
+  assign price = product.price
+  assign compare = product.compare_at_price
+  assign on_sale = false
+  if compare > price
+    assign on_sale = true
+  endif
+
+  assign price_money = price | money_without_trailing_zeros
+  if product.price_varies
+    assign price_money = 'products.product.price.from_price_html' | t: price: price_money
+  endif
+-%}
+{%- unless part == 'saving' -%}
+  {%- if on_sale -%}
+    <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+  {%- endif -%}
+  <strong>{{ price_money }}</strong>
+  {%- if on_sale -%}
+    <s><span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>{{ compare | money_without_trailing_zeros }}</s>
+  {%- endif -%}
+{%- endunless -%}
+{%- if on_sale and part != 'prices' -%}
+  {%- if save != 'none' -%}
+    {%- liquid
+      assign saving = compare | minus: price
+      if save == 'percent'
+        assign pct = saving | times: 100 | divided_by: compare
+        assign saving_text = pct | append: '%'
+      else
+        assign saving_text = saving | money_without_trailing_zeros
+      endif
+    -%}
+    <{{ save_tag }}{% if save_class %} class="{{ save_class }}"{% endif %}>
+      {{- save_template | escape | replace: '[saving]', saving_text -}}
+    </{{ save_tag }}>
+  {%- endif -%}
+{%- endif -%}

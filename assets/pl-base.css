@@ -1,0 +1,459 @@
+/* ==========================================================================
+   Purelane base: tokens + primitives shared by every pl-* section.
+
+   Values are the *resolved* cascade of the prototype (its V1 dark sheet with
+   the V2 "brand colours (light)" sheet on top), so there is one declaration
+   per property instead of two sheets fighting. Everything is scoped under
+   .pl so nothing leaks into Dawn, and every class is pl- prefixed because
+   Dawn already owns .card, .badge, .price, .rating, .button.
+
+   Deliberate deviations from the prototype are marked "A11Y" or "PERF" and
+   listed in NOTES.md.
+   ========================================================================== */
+
+.pl {
+  --pl-ink: #f4f0fb;
+  --pl-brand: #4b3a8f;
+  --pl-paper: #241a3d;
+  --pl-paper-2: rgba(36, 26, 61, 0.78);
+  /* A11Y: prototype used .56 alpha = 3.5-3.8:1 on this ground. .66 clears 4.5:1
+     on glass and on the upper/mid scene gradients. */
+  --pl-paper-3: rgba(36, 26, 61, 0.66);
+  --pl-accent: #b8701c;
+  /* A11Y: #b8701c is 2.7-3.8:1, fine for large display text but not for the
+     9-16px labels that also used it. Same hue, darkened, for small text only. */
+  --pl-accent-text: #945a14;
+  --pl-accent-2: #c9761d;
+  --pl-leaf: #4f7d10;
+  --pl-star: #7a9c1e;
+  --pl-teal-ink: #01423b;
+  --pl-surface: #17102b;
+  --pl-g-bg: linear-gradient(158deg, rgba(255, 255, 255, 0.8), rgba(236, 230, 247, 0.56) 58%, rgba(222, 212, 240, 0.5));
+  --pl-g-line: rgba(75, 58, 143, 0.16);
+  --pl-g-shadow: 0 22px 54px rgba(58, 44, 112, 0.13);
+  --pl-g-inset: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  --pl-r: 26px;
+  --pl-maxw: 1180px;
+  --pl-sec-y: 34px;
+  --pl-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --pl-font-display: 'Outfit', system-ui, sans-serif;
+  --pl-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  position: relative;
+  font-family: var(--pl-font-body);
+  font-size: 16px;
+  line-height: 1.62;
+  letter-spacing: 0;
+  color: var(--pl-paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 760px) {
+  .pl {
+    --pl-sec-y: 22px;
+  }
+}
+
+/* Reset Dawn's element defaults inside our scope only. :where() keeps this at
+   single-class weight so component rules always win. */
+.pl :where(h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote) {
+  margin: 0;
+  padding: 0;
+}
+.pl :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+.pl :where(button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.pl :where(img, svg) {
+  display: block;
+  max-width: 100%;
+}
+.pl :focus-visible {
+  outline: 2px solid var(--pl-leaf);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+/* ---------- layout ---------- */
+.pl-wrap {
+  max-width: var(--pl-maxw);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+.pl-sec {
+  padding: var(--pl-sec-y) 0;
+}
+.pl-sec-pad {
+  padding: clamp(26px, 3.4vw, 40px);
+}
+@media (max-width: 760px) {
+  .pl-sec-pad {
+    padding: 22px 18px;
+  }
+}
+
+/* ---------- type ---------- */
+.pl-d1,
+.pl-d2,
+.pl-d3 {
+  font-family: var(--pl-font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.018em;
+  font-weight: 800;
+  line-height: 0.87;
+  color: var(--pl-surface);
+  word-break: normal;
+}
+.pl-d1 {
+  font-size: clamp(48px, 8.6vw, 112px);
+}
+.pl-d2 {
+  font-size: clamp(30px, 4.6vw, 54px);
+  line-height: 0.94;
+}
+.pl-d3 {
+  font-size: clamp(21px, 2.5vw, 30px);
+  line-height: 1.04;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+@media (max-width: 760px) {
+  .pl-d1 {
+    font-size: clamp(44px, 13.5vw, 64px);
+  }
+}
+.pl-lime {
+  color: var(--pl-accent);
+}
+.pl-lede {
+  font-size: clamp(15px, 1.35vw, 17.5px);
+  color: var(--pl-paper-2);
+  max-width: 44ch;
+}
+.pl-body-s {
+  font-size: 14.5px;
+  color: var(--pl-paper-2);
+  line-height: 1.66;
+}
+.pl-kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pl-paper-3);
+}
+
+/* ---------- glass ---------- */
+.pl-glass {
+  position: relative;
+  overflow: hidden;
+  background: var(--pl-g-bg);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--pl-g-line);
+  border-radius: var(--pl-r);
+  box-shadow: var(--pl-g-shadow), var(--pl-g-inset);
+}
+.pl-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.55), transparent 32%, transparent 74%, rgba(201, 118, 29, 0.06));
+}
+.pl-glass-2 {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(158deg, rgba(255, 255, 255, 0.66), rgba(236, 230, 247, 0.44));
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(75, 58, 143, 0.13);
+  border-radius: var(--pl-r);
+  box-shadow: 0 16px 38px rgba(58, 44, 112, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+@media (max-width: 760px) {
+  .pl-glass {
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+  .pl-glass-2 {
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    backdrop-filter: blur(12px) saturate(130%);
+  }
+}
+
+/* Highlighted card (combo "hero", tier "best"). */
+.pl-glass.pl-is-featured {
+  border-color: rgba(201, 118, 29, 0.46);
+  box-shadow: 0 22px 54px rgba(58, 44, 112, 0.14), 0 0 0 1px rgba(201, 118, 29, 0.24), var(--pl-g-inset);
+}
+
+/* ---------- buttons ---------- */
+.pl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-family: var(--pl-font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: 0.35s var(--pl-ease);
+}
+.pl-btn svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+.pl-btn--primary {
+  background: linear-gradient(135deg, #00706a, #004b46);
+  color: #f4fdf6;
+  box-shadow: 0 12px 26px rgba(0, 80, 74, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.pl-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(0, 80, 74, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+.pl-btn--ghost {
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(75, 58, 143, 0.22);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--pl-teal-ink);
+}
+.pl-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+.pl-btn--sm {
+  height: 38px;
+  padding: 0 18px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+.pl-btn--block {
+  width: 100%;
+  justify-content: center;
+}
+.pl-btn[disabled],
+.pl-btn[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+/* Dawn's <product-form> toggles .loading + an absolutely positioned spinner. */
+.pl-btn {
+  position: relative;
+}
+.pl-btn.loading {
+  color: transparent;
+}
+.pl-btn.loading > .loading__spinner {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+.pl-btn.loading > .loading__spinner .path {
+  stroke: var(--pl-teal-ink);
+}
+
+/* ---------- divider rule with leaf ---------- */
+.pl-rule {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 0 20px;
+  max-width: 270px;
+}
+.pl-rule i {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, rgba(75, 58, 143, 0.34), transparent);
+}
+.pl-rule svg {
+  width: 16px;
+  height: 16px;
+  color: var(--pl-accent);
+  flex: 0 0 auto;
+}
+
+/* ---------- centred section head ---------- */
+.pl-head {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.pl-head .pl-d2 {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+.pl-head .pl-rule {
+  margin: 0 auto;
+  justify-content: center;
+  max-width: 240px;
+}
+.pl-head .pl-rule i:first-child {
+  background: linear-gradient(90deg, transparent, rgba(75, 58, 143, 0.34));
+}
+.pl-head .pl-lede {
+  margin: 0 auto;
+}
+.pl-head .pl-rule + .pl-lede {
+  margin-top: 14px;
+}
+.pl-head--flush {
+  margin-bottom: 0;
+}
+
+/* ---------- pills / tags ---------- */
+.pl-pill {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.62;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(201, 118, 29, 0.14);
+  border: 1px solid rgba(201, 118, 29, 0.34);
+  color: var(--pl-leaf);
+}
+
+/* ---------- product image primitives ---------- */
+.pl-pimg {
+  display: block;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: center bottom;
+  flex: 0 0 auto;
+}
+/* Shown when a product has no image (a real merchant state, not an error). */
+.pl-tile {
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px dashed rgba(75, 58, 143, 0.26);
+  color: var(--pl-leaf);
+}
+.pl-tile svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* ---------- stars ---------- */
+.pl-stars {
+  color: var(--pl-star);
+  letter-spacing: 0.2em;
+}
+
+/* ---------- small round control (pause/play for moving content) ---------- */
+.pl-ctrl {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(75, 58, 143, 0.18);
+  color: var(--pl-teal-ink);
+  transition: background 0.3s;
+}
+.pl-ctrl:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+.pl-ctrl svg {
+  width: 12px;
+  height: 12px;
+}
+/* Shows the pause icon while playing and the play icon while paused. The
+   button's aria-label carries the action, so no aria-pressed. */
+.pl-ctrl [data-when] {
+  display: none;
+}
+.pl-ctrl[data-paused='false'] [data-when='playing'],
+.pl-ctrl[data-paused='true'] [data-when='paused'] {
+  display: block;
+}
+
+/* ---------- scroll reveal ----------
+   Only hidden when html.pl-motion is set (JS + IO + motion allowed), so a
+   failed script never leaves content invisible. */
+.pl-motion .pl-rv {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(7px);
+  transition: opacity 0.95s var(--pl-ease), transform 0.95s var(--pl-ease), filter 0.95s var(--pl-ease);
+}
+.pl-motion .pl-rv.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.pl-motion .pl-rv.pl-rv-d1 {
+  transition-delay: 0.09s;
+}
+.pl-motion .pl-rv.pl-rv-d2 {
+  transition-delay: 0.18s;
+}
+.pl-motion .pl-rv.pl-rv-d3 {
+  transition-delay: 0.27s;
+}
+.pl-motion .pl-rv.pl-rv-d4 {
+  transition-delay: 0.36s;
+}
+
+/* ---------- lift-on-hover cards ----------
+   The prototype's `.card{transition:.4s}` came after `.rv-d1{...}`, so on
+   cards it silently replaced the staggered .95s reveal. Here the reveal runs
+   first; pl-base.js adds .is-done afterwards and the hover transition takes
+   over with no delay. */
+.pl-lift:not(.pl-rv),
+.pl-motion .pl-lift.is-done {
+  transition: transform 0.4s var(--pl-ease);
+  transition-delay: 0s;
+}
+.pl .pl-lift:hover {
+  transform: translateY(-5px);
+}
+
+/* Theme editor notice for sections with nothing to show yet. */
+.pl-editor-note {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px dashed rgba(75, 58, 143, 0.35);
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  color: var(--pl-paper);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl *,
+  .pl *::before,
+  .pl *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
