@@ -6,6 +6,7 @@ Everything here was produced by scripts in `tools/preview/`, so it can be re-run
 npm run check                                   # Shopify theme-check
 npm run compare                                 # prototype vs build, 4 widths
 npm run behaviour                               # motion, editor events, CLS, errors
+npm run e2e                                     # click-through: cart, bundles, links, sold out
 QA_BEFORE=<checkout of c332441> npm run qa      # this report's images + results.json
 ```
 
@@ -20,7 +21,8 @@ theme editor and Lighthouse get tested for real.
 |---|---|
 | Theme-check (Shopify's linter) | 0 errors. The 9 warnings are all in stock Dawn files; 0 come from the Purelane files. |
 | Prototype vs build, 18 elements × 4 widths (375 / 768 / 1024 / 1440) | 68 measured (4 are hidden at that width by design): 56 identical to 0.1px. The other 12 are the hero price flag, 0.2–1.5px wider or narrower because of the ₹ glyph, and the bundle tiers, 2px shorter because of a prototype bug I didn't copy (below). |
-| Layout shift on load (CLS) | 0.0000 |
+| Click-through (`npm run e2e`), desktop and mobile | All passed. Every Add to cart (7 products), the sold-out product blocked on the button and in the cart, every "Shop bundle" (5) opening its product page and adding from it, cart +/−/empty, the header count, all 21 homepage links, and no failed requests. |
+| Layout shift on load (CLS) | 0.0000 in 12 of 13 runs. One run measured 0.0004 and never reproduced across cold and warm loads; Google's "good" limit is 0.1. |
 | Hero fills the first screen | Bottom edge exactly at the fold (1000 / 1000px) |
 | Horizontal page scroll, 375–1920px | None at any of 9 widths |
 | Slideshow | Advances every 3.8s. The pause button stops it, dots jump to their slide, and the active slide is exposed to screen readers. |
@@ -28,6 +30,15 @@ theme editor and Lighthouse get tested for real.
 | Theme editor (simulated) | Section re-render restarts cleanly. Selecting a slide shows and holds it; deselecting resumes. Selecting an off-screen combo scrolls to it. |
 | Keyboard | Visible focus ring. Add to cart is announced with the product name ("Add to cart, Kitchen cleaner, foaming"). |
 | Console errors | None |
+
+## Click-through (local preview)
+
+The local server stands in for the Shopify pages the sections link to, so every button can be
+tested. On the store these are Dawn's own product page and cart drawer.
+
+| "Shop bundle" → product page | Add to cart → cart (count in header) | Sold-out product |
+|---|---|---|
+| ![](img/e2e-product-page.jpg) | ![](img/e2e-cart.jpg) | ![](img/e2e-sold-out.jpg) |
 
 ## The five sections (build)
 
@@ -114,8 +125,10 @@ don't break if that inline rule changes. Without Dawn's rule, before (left) / af
   - It failed silently when an old copy still held the port.
   - Add to cart spun forever because the mock page lacked `window.routes`, which Shopify prints
     on real pages.
+  - It had no header, cart or product pages, so Add to cart and "Shop bundle" had nowhere to go.
+    It now has all three, and `npm run e2e` clicks through them.
 
-  All three are fixed.
+  All of these are fixed.
 
 ## Prototype bugs I deliberately did not copy
 

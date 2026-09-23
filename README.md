@@ -95,12 +95,18 @@ tables above, add products, and fill the metafields. `store-seed/data.json` hold
 
 ```sh
 npm run check       # Shopify theme-check (0 errors; only stock Dawn's 9 warnings remain)
-npm run preview     # render the real sections locally (LiquidJS + seed data) at :8377
+npm run preview     # local preview at http://127.0.0.1:8377/ (keep the terminal open)
+npm run e2e         # clicks every button and link: add to cart, bundles, cart, sold out
 npm run compare     # prototype vs build, 375/768/1024/1440 → tools/preview/out/compare/
 npm run behaviour   # motion on: reveal, slideshow, marquee, CLS, focus order, editor events
 ```
 
-The preview harness is not Shopify. It shims Shopify-only tags and filters so layout and
-behaviour can be checked without a store. The store is the real test (see the gaps in NOTES.md).
+The preview renders the real section files with LiquidJS and the seed data. A small local server
+stands in for the Shopify pages the sections link to: a header with a cart count, product pages
+and a working cart. On the store, Dawn's header, product pages and cart drawer take their place.
+It is a harness, not Shopify; the dev store is the real test (see the gaps in NOTES.md).
+
+If `npm run preview` says the port is in use, an older preview is still running. Close that
+terminal (or press Ctrl+C in it) and run it again. Reloading the browser does not restart it.
 
 Dawn is © Shopify, MIT licensed (`LICENSE.md`). Outfit and Inter are under the SIL Open Font License.

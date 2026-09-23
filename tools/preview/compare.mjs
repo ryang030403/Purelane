@@ -53,7 +53,7 @@ const pairs = [
 // Pausing animations with injected CSS instead makes each headless
 // (software-rendered) frame re-rasterise the blended water and all the
 // backdrop-filter glass: 90s+ per capture.
-const HIDE_CHROME = '.ticker, header, .rail, .sticky, .preview-header { display: none !important; }';
+const HIDE_CHROME = '.ticker, header, .rail, .sticky, .preview-header, .pv-bar { display: none !important; }';
 
 const browser = await puppeteer.launch({
   executablePath: browserPath,

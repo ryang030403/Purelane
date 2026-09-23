@@ -160,9 +160,14 @@
       "type": "Bundle",
       "price": "499.00",
       "compare_at_price": "897.00",
-      "items": ["kitchen-cleaner-foaming", "dishwash-gel", "tap-cleaner-limescale-remover"],
+      "items": [
+        "kitchen-cleaner-foaming",
+        "dishwash-gel",
+        "tap-cleaner-limescale-remover"
+      ],
       "summary": "Includes: Foaming Kitchen Cleaner, Dishwash Gel & Tap Cleaner. Everything for a sparkling kitchen, no need to pick separately.",
-      "description": "Foaming Kitchen Cleaner, Dishwash Gel and Tap Cleaner in one box."
+      "description": "Foaming Kitchen Cleaner, Dishwash Gel and Tap Cleaner in one box.",
+      "image": "combo2"
     },
     {
       "handle": "laundry-care-bundle",
@@ -170,9 +175,14 @@
       "type": "Bundle",
       "price": "499.00",
       "compare_at_price": "947.00",
-      "items": ["laundry-detergent", "fabric-conditioner", "washing-machine-cleaner-descaler"],
+      "items": [
+        "laundry-detergent",
+        "fabric-conditioner",
+        "washing-machine-cleaner-descaler"
+      ],
       "summary": "Includes: Laundry Detergent, Fabric Conditioner & Machine Cleaner Powder. Softer, fresher wash, all in one box.",
-      "description": "Laundry Detergent, Fabric Conditioner and Machine Cleaner in one box."
+      "description": "Laundry Detergent, Fabric Conditioner and Machine Cleaner in one box.",
+      "image": "combo2"
     },
     {
       "handle": "complete-home-bundle",
@@ -180,9 +190,16 @@
       "type": "Bundle",
       "price": "799.00",
       "compare_at_price": "1495.00",
-      "items": ["kitchen-cleaner-foaming", "herbal-floor-cleaner", "hydrating-handwash", "laundry-detergent", "toilet-cleaner"],
+      "items": [
+        "kitchen-cleaner-foaming",
+        "herbal-floor-cleaner",
+        "hydrating-handwash",
+        "laundry-detergent",
+        "toilet-cleaner"
+      ],
       "summary": "Includes: Kitchen Cleaner, Laundry Detergent, Floor Cleaner, Toilet Cleaner & Handwash. Our biggest saving box.",
-      "description": "Five bestsellers for every room."
+      "description": "Five bestsellers for every room.",
+      "image": "combo2"
     },
     {
       "handle": "bathroom-deep-clean-combo",
@@ -190,9 +207,14 @@
       "type": "Bundle",
       "price": "499.00",
       "compare_at_price": "897.00",
-      "items": ["toilet-cleaner", "tap-cleaner-limescale-remover", "magic-eraser"],
+      "items": [
+        "toilet-cleaner",
+        "tap-cleaner-limescale-remover",
+        "magic-eraser"
+      ],
       "summary": "Includes: Toilet Cleaner, Tap Cleaner & Magic Eraser. A complete bathroom refresh in one box.",
-      "description": "Toilet Cleaner, Tap Cleaner and Magic Eraser in one box."
+      "description": "Toilet Cleaner, Tap Cleaner and Magic Eraser in one box.",
+      "image": "combo2"
     },
     {
       "handle": "hard-water-solution-kit",
@@ -200,9 +222,13 @@
       "type": "Bundle",
       "price": "349.00",
       "compare_at_price": "598.00",
-      "items": ["tap-cleaner-limescale-remover", "toilet-cleaner"],
+      "items": [
+        "tap-cleaner-limescale-remover",
+        "toilet-cleaner"
+      ],
       "summary": "Includes: Tap Cleaner & Toilet Cleaner. A quick, focused fix for hard water stains across the home.",
-      "description": "Tap Cleaner and Toilet Cleaner in one box."
+      "description": "Tap Cleaner and Toilet Cleaner in one box.",
+      "image": "combo2"
     },
     {
       "handle": "any-2-products-box",
@@ -221,8 +247,13 @@
       "price": "499.00",
       "compare_at_price": "897.00",
       "size": 3,
-      "items": ["kitchen-cleaner-foaming", "tap-cleaner-limescale-remover", "dishwash-gel"],
-      "description": "Pick any three products for a flat price. Free shipping across India."
+      "items": [
+        "kitchen-cleaner-foaming",
+        "tap-cleaner-limescale-remover",
+        "dishwash-gel"
+      ],
+      "description": "Pick any three products for a flat price. Free shipping across India.",
+      "image": "combo2"
     },
     {
       "handle": "any-5-products-box",
@@ -238,7 +269,8 @@
         "toilet-cleaner",
         "laundry-detergent"
       ],
-      "description": "Pick any five products for a flat price. Free shipping across India."
+      "description": "Pick any five products for a flat price. Free shipping across India.",
+      "image": "combo2"
     }
   ],
   "collections": [
