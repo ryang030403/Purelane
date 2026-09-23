@@ -245,7 +245,11 @@ const page = `<!doctype html>
 </style>
 <link rel="stylesheet" href="${rel('assets/base.css')}">
 ${head}
-<script>window.Shopify = { designMode: false };</script>
+<script>
+  window.Shopify = { designMode: false };
+  // Printed by Dawn's theme.liquid on a real store; product-form.js needs it.
+  window.routes = { cart_add_url: '/cart/add', cart_change_url: '/cart/change', cart_update_url: '/cart/update', cart_url: '/cart', predictive_search_url: '/search/suggest' };
+</script>
 <script src="${rel('assets/constants.js')}" defer></script>
 <script src="${rel('assets/pubsub.js')}" defer></script>
 <script src="${rel('assets/global.js')}" defer></script>
