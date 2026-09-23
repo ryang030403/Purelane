@@ -1,0 +1,8 @@
+# Keep LF everywhere (Dawn upstream is LF; Git for Windows defaults to CRLF).
+* text=auto eol=lf
+
+# The prototype is kept byte-for-byte as delivered.
+reference/** -text
+
+*.woff2 binary
+*.png binary
