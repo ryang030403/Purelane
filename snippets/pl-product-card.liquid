@@ -1,0 +1,71 @@
+{% comment %}
+  Purelane product card (glass card with product shot, badge pill, title,
+  rating, price trio and add to cart).
+
+  Data:
+  - badge: product metafield custom.badge; "Sold out" replaces it when the
+    product is unavailable.
+  - rating: Shopify's standard reviews.rating / reviews.rating_count
+    metafields (the ones review apps write to).
+
+  Accepts:
+  - product: {Object} (required)
+  - section_id: {String} (required)
+  - saving_label: {String} e.g. "[saving] off" (optional)
+  - show_rating: {Boolean} (optional, default true)
+  - class: {String} extra classes, e.g. reveal delays (optional)
+  - heading_tag: {String} (optional, default 'h3')
+
+  Usage:
+  {% render 'pl-product-card', product: product, section_id: section.id %}
+{% endcomment %}
+{%- liquid
+  assign heading_tag = heading_tag | default: 'h3'
+  assign title_id = 'pl-card-' | append: section_id | append: '-' | append: product.id
+  assign badge = product.metafields.custom.badge.value
+  if product.available == false
+    assign badge = 'products.product.sold_out' | t
+  endif
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value
+-%}
+<article class="pl-card pl-glass pl-lift {{ class }}" aria-labelledby="{{ title_id }}">
+  <div class="pl-card__shot">
+    {%- if badge != blank -%}
+      <span class="pl-card__pill">{{ badge | escape }}</span>
+    {%- endif -%}
+    <a href="{{ product.url }}" class="pl-card__media" tabindex="-1" aria-hidden="true">
+      {%- render 'pl-product-media',
+        product: product,
+        height: 122,
+        class: 'pl-pimg pl-card__img',
+        tile_class: 'pl-card__tile',
+        decorative: true
+      -%}
+    </a>
+  </div>
+
+  <{{ heading_tag }} class="pl-card__title" id="{{ title_id }}">
+    <a href="{{ product.url }}" title="{{ product.title | escape }}">{{ product.title | escape }}</a>
+  </{{ heading_tag }}>
+
+  {%- if show_rating != false and rating != blank -%}
+    <div class="pl-card__rate">
+      <b><span aria-hidden="true">&#9733; </span>{{ rating.rating | round: 1 }}</b>
+      {%- if rating_count > 0 -%}
+        <span><span aria-hidden="true">&middot; </span>{{ 'purelane.grid.review_count' | t: count: rating_count }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="pl-card__pr">
+    {%- render 'pl-price', product: product, save: 'percent', save_template: saving_label -%}
+  </div>
+
+  {%- render 'pl-add-to-cart',
+    product: product,
+    section_id: section_id,
+    labelled_by: title_id,
+    class: 'pl-btn pl-btn--ghost pl-btn--sm pl-btn--block'
+  -%}
+</article>
