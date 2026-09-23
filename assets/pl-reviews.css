@@ -1,0 +1,162 @@
+/* ==========================================================================
+   Purelane reviews rail. Resolved from the prototype's .revband / .revhead /
+   .revrail / .revtrack / .rcard rules (V1 + V2).
+   ========================================================================== */
+
+.pl-revhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 18px;
+  margin-bottom: 14px;
+}
+.pl-revhead .pl-kicker {
+  font-family: var(--pl-font-body);
+  line-height: 1.62;
+}
+.pl-revhead__agg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pl-paper-2);
+}
+.pl-revhead__agg b,
+.pl-revhead__agg strong {
+  font-family: var(--pl-font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--pl-accent-text);
+}
+.pl-revhead__agg .pl-stars {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+/* ---------- marquee ---------- */
+pl-marquee {
+  display: block;
+}
+.pl-revrail {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+/* Two identical sets. Each set carries its own trailing 12px (instead of a
+   gap between sets), so -50% is exactly one period and the loop never
+   jumps; the prototype's single flex gap left it 6px off. */
+.pl-revtrack {
+  display: flex;
+  width: max-content;
+  animation: pl-marquee calc(var(--pl-count, 5) * 10.4s) linear infinite;
+}
+.pl-revset {
+  display: flex;
+  gap: 12px;
+  padding-right: 12px;
+  list-style: none;
+}
+.pl-revrail:hover .pl-revtrack,
+.pl-revrail:focus-within .pl-revtrack,
+.pl-revrail.is-paused .pl-revtrack,
+.pl-revrail.is-offscreen .pl-revtrack {
+  animation-play-state: paused;
+}
+@keyframes pl-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.pl-rcard {
+  flex: 0 0 auto;
+  width: 284px;
+  padding: 15px 17px;
+  border-radius: 18px;
+}
+.pl-rcard__st {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 10.5px;
+  line-height: 1.62;
+}
+.pl-rcard__title {
+  margin-bottom: 7px;
+  font-family: var(--pl-font-display);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.62;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pl-surface);
+}
+.pl-rcard__body {
+  margin-bottom: 11px;
+  font-size: 12.6px;
+  line-height: 1.52;
+  color: var(--pl-paper-2);
+}
+.pl-rcard__who {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pl-paper-3);
+}
+.pl-rcard__who b {
+  font-weight: 700;
+  color: var(--pl-teal-ink);
+}
+.pl-rcard__who svg {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  color: var(--pl-leaf);
+}
+
+@media (max-width: 760px) {
+  .pl-rcard {
+    width: 250px;
+    padding: 13px 14px;
+  }
+  .pl-revtrack {
+    animation-duration: calc(var(--pl-count, 5) * 8s);
+  }
+}
+
+/* Reduced motion: no marquee. The rail becomes a normal swipeable row and
+   the duplicate set is dropped. */
+@media (prefers-reduced-motion: reduce) {
+  .pl-revtrack {
+    animation: none;
+  }
+  .pl-revset[aria-hidden='true'] {
+    display: none;
+  }
+  .pl-revrail {
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .pl-revset {
+    padding-left: 18px;
+  }
+  .pl-rcard {
+    scroll-snap-align: center;
+  }
+  .pl-revhead__toggle {
+    display: none;
+  }
+}

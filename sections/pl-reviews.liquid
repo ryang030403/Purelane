@@ -1,0 +1,194 @@
+{% comment %}
+  Purelane reviews rail: aggregate line + auto-scrolling marquee of review
+  cards.
+
+  Reviews are "customer_review" metaobject entries (Content > Metaobjects),
+  picked and ordered in the section settings. If none are picked, the
+  newest entries are shown. See NOTES.md for the definition.
+{% endcomment %}
+{{ 'pl-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign reviews = section.settings.reviews
+  if reviews == blank or reviews.size == 0
+    assign reviews = shop.metaobjects.customer_review.values
+  endif
+  assign max = section.settings.limit
+  assign count = reviews.size
+  if count > max
+    assign count = max
+  endif
+  assign heading_id = 'pl-reviews-heading-' | append: section.id
+-%}
+
+<div
+  class="pl pl-sec pl-revband"
+  {% if section.settings.anchor != blank %}
+    id="{{ section.settings.anchor | handle }}"
+  {% endif %}
+  data-pl-scene="{{ section.settings.scene }}"
+>
+  <div class="pl-wrap">
+    <div class="pl-revhead pl-rv">
+      {%- if section.settings.kicker != blank -%}
+        <h2 class="pl-kicker" id="{{ heading_id }}">{{ section.settings.kicker | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.summary_1 != blank -%}
+        <span class="pl-revhead__agg">
+          {%- if section.settings.show_stars -%}
+            <span class="pl-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          {%- endif %}
+          {{ section.settings.summary_1 -}}
+        </span>
+      {%- endif -%}
+      {%- if section.settings.summary_2 != blank -%}
+        <span class="pl-revhead__agg">{{ section.settings.summary_2 }}</span>
+      {%- endif -%}
+      {%- if count > 0 -%}
+        <button
+          type="button"
+          class="pl-ctrl pl-revhead__toggle"
+          data-marquee-toggle
+          data-paused="false"
+          data-label-pause="{{ 'purelane.reviews.pause' | t }}"
+          data-label-play="{{ 'purelane.reviews.play' | t }}"
+          aria-label="{{ 'purelane.reviews.pause' | t }}"
+        >
+          <span data-when="playing">{% render 'pl-icon', name: 'pause', stroke: 2.6 %}</span>
+          <span data-when="paused">{% render 'pl-icon', name: 'play' %}</span>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if count > 0 -%}
+    {%- capture cards -%}
+      {%- for review in reviews limit: max -%}
+        {%- liquid
+          assign product_label = review.product_label.value | default: review.product.value.title
+        -%}
+        <li class="pl-rcard pl-glass-2">
+          {%- if review.rating.value != blank -%}
+            {%- render 'pl-stars',
+              rating: review.rating.value.rating,
+              scale: review.rating.value.scale_max,
+              class: 'pl-rcard__st'
+            -%}
+          {%- endif -%}
+          {%- if review.title.value != blank -%}
+            <h3 class="pl-rcard__title">{{ review.title.value | escape }}</h3>
+          {%- endif -%}
+          <p class="pl-rcard__body">{{ review.body.value | escape }}</p>
+          <div class="pl-rcard__who">
+            {%- if review.verified.value -%}
+              {%- render 'pl-icon', name: 'check', stroke: 3 -%}
+              <span class="visually-hidden">{{ 'purelane.reviews.verified' | t }}:</span>
+            {%- endif -%}
+            <b>{{ review.author.value | escape }}</b>
+            {%- if product_label != blank -%}
+              <span><span aria-hidden="true">&middot; </span>{{ product_label | escape }}</span>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    <pl-marquee class="pl-revrail pl-rv" role="region" aria-labelledby="{{ heading_id }}">
+      <div class="pl-revtrack" style="--pl-count: {{ count }};">
+        <ul class="pl-revset" role="list">{{ cards }}</ul>
+        {%- comment -%}Visual duplicate for the seamless loop; hidden from assistive tech and focus.{%- endcomment -%}
+        <ul class="pl-revset" role="list" aria-hidden="true" inert>{{ cards }}</ul>
+      </div>
+    </pl-marquee>
+    <script src="{{ 'pl-marquee.js' | asset_url }}" defer="defer"></script>
+  {%- elsif request.design_mode -%}
+    <div class="pl-wrap">
+      <p class="pl-editor-note">{{ 'purelane.reviews.editor_empty' | t }}</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Purelane reviews rail",
+  "tag": "section",
+  "class": "pl-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Heading",
+      "default": "That's what they said"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stars",
+      "label": "Show stars before the first summary",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "summary_1",
+      "label": "First summary",
+      "info": "Bold text is highlighted.",
+      "default": "<b>4.8</b> from 8,000+ reviews"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "summary_2",
+      "label": "Second summary",
+      "info": "Bold text is highlighted. Leave empty to hide.",
+      "default": "Loved by <b>12 lakh+</b> homes"
+    },
+    {
+      "type": "header",
+      "content": "Reviews"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "reviews",
+      "label": "Reviews",
+      "metaobject_type": "customer_review",
+      "info": "Pick and order reviews. If none are picked, the latest reviews are shown."
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Maximum reviews",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor",
+      "info": "Lets menus link here, e.g. /#reviews.",
+      "default": "reviews"
+    },
+    {
+      "type": "select",
+      "id": "scene",
+      "label": "Background depth",
+      "info": "Needs the Purelane backdrop section.",
+      "options": [
+        { "value": "1", "label": "Surface" },
+        { "value": "2", "label": "Shallow" },
+        { "value": "3", "label": "Deep" },
+        { "value": "4", "label": "Deepest" }
+      ],
+      "default": "1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane reviews rail"
+    }
+  ]
+}
+{% endschema %}
