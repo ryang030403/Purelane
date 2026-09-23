@@ -7,8 +7,9 @@
 import puppeteer from 'puppeteer-core';
 import { PNG } from 'pngjs';
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { serve } from './serve.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const outDir = path.join(root, 'tools/preview/out/compare');
@@ -21,8 +22,9 @@ const browserPath = [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ].find(existsSync);
 
-const PROTO = pathToFileURL(path.join(root, 'reference/purelane-homepage.html')).href;
-const OURS = pathToFileURL(path.join(root, 'tools/preview/out/index.html')).href;
+const { server, origin } = await serve();
+const PROTO = `${origin}/reference/purelane-homepage.html`;
+const OURS = `${origin}/tools/preview/out/index.html`;
 const widths = (process.argv[2] || '375,768,1024,1440').split(',').map(Number);
 
 // [label, prototype selector, our selector]
@@ -149,5 +151,6 @@ for (const width of widths) {
   lines.push('');
 }
 await browser.close();
+server.close();
 writeFileSync(path.join(outDir, 'report.md'), lines.join('\n'));
 console.log(lines.join('\n'));

@@ -7,7 +7,10 @@
     "extract": "node tools/extract-prototype-assets.mjs",
     "seed:images": "node tools/rasterize-seed-images.mjs",
     "seed": "node store-seed/seed.mjs",
-    "check": "node tools/theme-check.mjs"
+    "check": "node tools/theme-check.mjs",
+    "preview": "node tools/preview/render.mjs && node tools/preview/serve.mjs",
+    "compare": "node tools/preview/render.mjs && node tools/preview/compare.mjs",
+    "behaviour": "node tools/preview/render.mjs && node tools/preview/behaviour.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
