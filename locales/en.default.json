@@ -552,6 +552,10 @@
       "editor_empty": "Pick a bundle product for this block. Bundle contents come from the product's \"Bundle items\" metafield."
     },
     "grid": {
+      "review_count": {
+        "one": "{{ count }} review",
+        "other": "{{ count }} reviews"
+      },
       "editor_empty": "Choose a collection in this section's settings to show products."
     }
   }
