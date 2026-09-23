@@ -12,8 +12,17 @@ page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 page.on('console', (m) => m.type() === 'error' && !m.text().includes('404') && errors.push('console: ' + m.text()));
 page.on('response', (r) => r.status() >= 400 && !r.url().endsWith('/favicon.ico') && errors.push('HTTP ' + r.status() + ' ' + r.url()));
 await page.setViewport({ width: 1440, height: 1000 });
+await page.evaluateOnNewDocument(() => {
+  window.__cls = 0;
+  new PerformanceObserver((list) => {
+    for (const e of list.getEntries()) if (!e.hadRecentInput) window.__cls += e.value;
+  }).observe({ type: 'layout-shift', buffered: true });
+});
 await page.goto(origin + '/tools/preview/out/index.html', { waitUntil: 'load' });
 const q = (fn, ...a) => page.evaluate(fn, ...a);
+await new Promise((r) => setTimeout(r, 1500));
+console.log('CLS after load (no scrolling):', (await page.evaluate(() => window.__cls)).toFixed(4));
+console.log('hero bottom vs fold:', await page.evaluate(() => Math.round(document.querySelector('pl-hero').getBoundingClientRect().bottom) + ' vs ' + innerHeight));
 console.log('pl-motion:', await q(() => document.documentElement.classList.contains('pl-motion')));
 console.log('custom elements:', await q(() => ['pl-hero', 'pl-marquee', 'pl-backdrop', 'product-form'].map((n) => n + '=' + !!customElements.get(n)).join(' ')));
 await new Promise((r) => setTimeout(r, 800));

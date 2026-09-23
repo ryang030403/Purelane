@@ -245,7 +245,7 @@ const page = `<!doctype html>
 </style>
 <link rel="stylesheet" href="${rel('assets/base.css')}">
 ${head}
-<script>window.Shopify = { designMode: false }; document.documentElement.style.setProperty('--header-height', '90px');</script>
+<script>window.Shopify = { designMode: false };</script>
 <script src="${rel('assets/constants.js')}" defer></script>
 <script src="${rel('assets/pubsub.js')}" defer></script>
 <script src="${rel('assets/global.js')}" defer></script>

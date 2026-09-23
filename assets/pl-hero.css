@@ -5,13 +5,14 @@
    The prototype's header was position:fixed over the hero, so the hero used
    min-height:100svh and a 150px top padding to clear it. On Dawn the header
    is in flow, so the hero fills the rest of the first screen instead
-   (Dawn publishes --header-height) and the top padding becomes the visible
-   gap under the header (--pl-hero-gap, a section setting, 52px by default;
-   the per-breakpoint offsets reproduce the prototype's 150/132/118px).
+   (--pl-hero-top: the hero's offset, measured inline before it paints)
+   and the top padding becomes the visible gap under the header
+   (--pl-hero-gap, a section setting, 52px by default; the per-breakpoint
+   offsets reproduce the prototype's 150/132/118px).
    ========================================================================== */
 
 .pl-hero {
-  min-height: calc(100svh - var(--header-height, 0px));
+  min-height: calc(100svh - var(--pl-hero-top, 0px));
   display: flex;
   align-items: flex-end;
   padding: var(--pl-hero-gap) 0 var(--pl-sec-y);

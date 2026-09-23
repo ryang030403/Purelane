@@ -73,6 +73,7 @@ async function open(url, width) {
     for (let i = 0; i <= last + 1000; i++) clearInterval(i);
   });
   await page.addStyleTag({ content: HIDE_CHROME });
+  await page.evaluate(() => window.dispatchEvent(new Event('resize')));
   await page.evaluate(async () => {
     document.querySelectorAll('.rv').forEach((el) => el.classList.add('in'));
     document.querySelectorAll('.pl-rv').forEach((el) => el.classList.add('is-in', 'is-done'));
