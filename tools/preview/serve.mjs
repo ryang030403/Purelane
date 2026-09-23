@@ -28,10 +28,24 @@ On the dev store this link opens the real ${url.pathname.startsWith('/cart') ? '
       if (!file.startsWith(root)) return res.writeHead(403).end();
       try {
         const body = await readFile(file);
-        res.writeHead(200, { 'content-type': types[path.extname(file)] || 'application/octet-stream' }).end(body);
+        res.writeHead(200, { 'content-type': types[path.extname(file)] || 'application/octet-stream', 'cache-control': 'no-store' }).end(body);
       } catch {
         res.writeHead(404).end();
       }
+    });
+    server.on('error', (e) => {
+      if (e.code !== 'EADDRINUSE') throw e;
+      console.error(
+        [
+          '',
+          `Port ${port} is already in use: an older preview is probably still running.`,
+          'Close that terminal (or press Ctrl+C in it), or in PowerShell run:',
+          `  Get-Process -Id (Get-NetTCPConnection -LocalPort ${port}).OwningProcess | Stop-Process`,
+          'then run npm run preview again.',
+          '',
+        ].join('\n')
+      );
+      process.exit(1);
     });
     server.listen(port, '127.0.0.1', () => resolve({ server, origin: `http://127.0.0.1:${server.address().port}` }));
   });
