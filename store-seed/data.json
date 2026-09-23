@@ -1,0 +1,312 @@
+{
+  "$comment": "Single source of truth for the dev store content. Used by store-seed/seed.mjs (Admin API) and by tools/preview (local render). Prices are in INR. Images live in store-seed/images.",
+  "products": [
+    {
+      "handle": "tap-cleaner-limescale-remover",
+      "title": "Tap cleaner & limescale remover",
+      "type": "Bathroom",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "tap",
+      "cutout": "tbtl",
+      "badge": "Best seller",
+      "benefit": "Melts hard water stains",
+      "rating": 4.8,
+      "rating_count": 237,
+      "description": "Two sprays and hard water scale wipes straight off taps, showers and fittings. Plant-derived acids, no harsh fumes. 500 ml."
+    },
+    {
+      "handle": "kitchen-cleaner-foaming",
+      "title": "Kitchen cleaner, foaming",
+      "type": "Kitchen",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "kitchen",
+      "cutout": "kbtl",
+      "badge": "Best seller",
+      "benefit": "Cuts grease instantly",
+      "rating": 4.8,
+      "rating_count": 254,
+      "description": "A foaming formula that clings to grease and lifts it, so you wipe instead of scrub. Orange peel and coconut cleansers. 500 ml."
+    },
+    {
+      "handle": "copper-bronze-brass-cleaner",
+      "title": "Copper, bronze & brass cleaner",
+      "type": "Home",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "metal",
+      "cutout": "mbtl",
+      "badge": "Top rated",
+      "benefit": "Brings back the shine",
+      "rating": 4.8,
+      "rating_count": 231,
+      "description": "Restores tarnished copper, bronze and brass without abrasives. Pump bottle, 300 ml."
+    },
+    {
+      "handle": "washing-machine-cleaner-descaler",
+      "title": "Washing machine cleaner & descaler",
+      "type": "Laundry",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "wm",
+      "badge": "New",
+      "benefit": "Deep-cleans your machine",
+      "rating": 4.8,
+      "rating_count": 183,
+      "description": "Monthly tablets that clear limescale and residue from drum and pipes. Front and top loaders. 8 tablets."
+    },
+    {
+      "handle": "dishwash-gel",
+      "title": "Organic dishwash liquid gel",
+      "type": "Kitchen",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "dish",
+      "benefit": "Squeaky clean dishes",
+      "rating": 4.9,
+      "rating_count": 276,
+      "description": "Cuts grease and stays kind to hands. Soap nut and lemongrass. 500 ml."
+    },
+    {
+      "handle": "herbal-floor-cleaner",
+      "title": "Natural herbal floor cleaner",
+      "type": "Home",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "floor",
+      "benefit": "Kills 99.9% germs",
+      "rating": 4.7,
+      "rating_count": 162,
+      "sold_out": true,
+      "description": "Neem powered and pet safe. Leaves floors clean with no toxic residue. 1 litre."
+    },
+    {
+      "handle": "fabric-conditioner",
+      "title": "Fabric conditioner",
+      "type": "Laundry",
+      "price": "249.00",
+      "compare_at_price": "349.00",
+      "benefit": "Softens & freshens every wash",
+      "rating": 4.7,
+      "rating_count": 64,
+      "description": "Plant-based softener for every wash. Product photography coming soon: this product intentionally has no image."
+    },
+    {
+      "handle": "coconut-coir-scrub-pads",
+      "title": "Coconut coir scrub pads for pots, pans, tiles, grills and every stubborn corner of the kitchen (pack of 6)",
+      "type": "Kitchen",
+      "price": "180.00",
+      "compare_at_price": "240.00",
+      "image": "eraser",
+      "benefit": "Scrubs without scratching",
+      "rating": 4.5,
+      "rating_count": 37,
+      "description": "Biodegradable coir pads. This product intentionally has a very long title."
+    },
+    {
+      "handle": "toilet-cleaner",
+      "title": "Non-toxic toilet cleaner",
+      "type": "Bathroom",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "toilet",
+      "benefit": "Kills 99.9% germs",
+      "rating": 4.8,
+      "rating_count": 198,
+      "description": "Thick gel that clings under the rim and kills 99.9% of germs, without chlorine. 500 ml."
+    },
+    {
+      "handle": "laundry-detergent",
+      "title": "Non-toxic laundry detergent",
+      "type": "Laundry",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "laundry",
+      "benefit": "Removes tough stains & odour",
+      "rating": 4.8,
+      "rating_count": 305,
+      "description": "Tough on odour, soft on fabric. Works in machines and by hand. 1 litre."
+    },
+    {
+      "handle": "hydrating-handwash",
+      "title": "Gentle hydrating liquid handwash",
+      "type": "Skin",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "handwash",
+      "benefit": "Gentle hydration for hands",
+      "rating": 4.7,
+      "rating_count": 141,
+      "description": "Soft on hands with a lovely fragrance. 250 ml."
+    },
+    {
+      "handle": "magic-eraser",
+      "title": "Magic eraser",
+      "type": "Bathroom",
+      "price": "200.00",
+      "compare_at_price": "299.00",
+      "image": "eraser",
+      "benefit": "Scrubs away soap scum",
+      "rating": 4.6,
+      "rating_count": 88,
+      "description": "Just add water. Lifts soap scum, scuffs and marks."
+    }
+  ],
+  "bundles": [
+    {
+      "handle": "kitchen-essentials-combo",
+      "title": "Kitchen essentials",
+      "type": "Bundle",
+      "price": "499.00",
+      "compare_at_price": "897.00",
+      "items": ["kitchen-cleaner-foaming", "dishwash-gel", "tap-cleaner-limescale-remover"],
+      "summary": "Includes: Foaming Kitchen Cleaner, Dishwash Gel & Tap Cleaner. Everything for a sparkling kitchen, no need to pick separately.",
+      "description": "Foaming Kitchen Cleaner, Dishwash Gel and Tap Cleaner in one box."
+    },
+    {
+      "handle": "laundry-care-bundle",
+      "title": "Laundry care bundle",
+      "type": "Bundle",
+      "price": "499.00",
+      "compare_at_price": "947.00",
+      "items": ["laundry-detergent", "fabric-conditioner", "washing-machine-cleaner-descaler"],
+      "summary": "Includes: Laundry Detergent, Fabric Conditioner & Machine Cleaner Powder. Softer, fresher wash, all in one box.",
+      "description": "Laundry Detergent, Fabric Conditioner and Machine Cleaner in one box."
+    },
+    {
+      "handle": "complete-home-bundle",
+      "title": "Complete home bundle",
+      "type": "Bundle",
+      "price": "799.00",
+      "compare_at_price": "1495.00",
+      "items": ["kitchen-cleaner-foaming", "herbal-floor-cleaner", "hydrating-handwash", "laundry-detergent", "toilet-cleaner"],
+      "summary": "Includes: Kitchen Cleaner, Laundry Detergent, Floor Cleaner, Toilet Cleaner & Handwash. Our biggest saving box.",
+      "description": "Five bestsellers for every room."
+    },
+    {
+      "handle": "bathroom-deep-clean-combo",
+      "title": "Bathroom deep clean",
+      "type": "Bundle",
+      "price": "499.00",
+      "compare_at_price": "897.00",
+      "items": ["toilet-cleaner", "tap-cleaner-limescale-remover", "magic-eraser"],
+      "summary": "Includes: Toilet Cleaner, Tap Cleaner & Magic Eraser. A complete bathroom refresh in one box.",
+      "description": "Toilet Cleaner, Tap Cleaner and Magic Eraser in one box."
+    },
+    {
+      "handle": "hard-water-solution-kit",
+      "title": "Hard water solution kit",
+      "type": "Bundle",
+      "price": "349.00",
+      "compare_at_price": "598.00",
+      "items": ["tap-cleaner-limescale-remover", "toilet-cleaner"],
+      "summary": "Includes: Tap Cleaner & Toilet Cleaner. A quick, focused fix for hard water stains across the home.",
+      "description": "Tap Cleaner and Toilet Cleaner in one box."
+    },
+    {
+      "handle": "any-2-products-box",
+      "title": "Build your box: any 2 products",
+      "type": "Bundle",
+      "price": "349.00",
+      "compare_at_price": "598.00",
+      "image": "combo2",
+      "size": 2,
+      "description": "Pick any two products for a flat price. Free shipping across India."
+    },
+    {
+      "handle": "any-3-products-box",
+      "title": "Build your box: any 3 products",
+      "type": "Bundle",
+      "price": "499.00",
+      "compare_at_price": "897.00",
+      "size": 3,
+      "items": ["kitchen-cleaner-foaming", "tap-cleaner-limescale-remover", "dishwash-gel"],
+      "description": "Pick any three products for a flat price. Free shipping across India."
+    },
+    {
+      "handle": "any-5-products-box",
+      "title": "Build your box: any 5 products",
+      "type": "Bundle",
+      "price": "799.00",
+      "compare_at_price": "1495.00",
+      "size": 5,
+      "items": [
+        "kitchen-cleaner-foaming",
+        "tap-cleaner-limescale-remover",
+        "herbal-floor-cleaner",
+        "toilet-cleaner",
+        "laundry-detergent"
+      ],
+      "description": "Pick any five products for a flat price. Free shipping across India."
+    }
+  ],
+  "collections": [
+    {
+      "handle": "bestsellers",
+      "title": "Bestsellers",
+      "products": [
+        "tap-cleaner-limescale-remover",
+        "kitchen-cleaner-foaming",
+        "copper-bronze-brass-cleaner",
+        "washing-machine-cleaner-descaler",
+        "dishwash-gel",
+        "herbal-floor-cleaner",
+        "fabric-conditioner",
+        "coconut-coir-scrub-pads"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "handle": "anita-laundry",
+      "rating": 5,
+      "title": "Works like a charm",
+      "body": "Finally an eco option that cleans as well as the chemical detergent I used for years, and it smells better.",
+      "author": "Anita",
+      "verified": true,
+      "product": "laundry-detergent",
+      "product_label": "Laundry detergent"
+    },
+    {
+      "handle": "priya-dishwash",
+      "rating": 5,
+      "title": "Best dishwash ever",
+      "body": "Our old dishwash left my help with dry, cracked skin. That stopped completely after we switched.",
+      "author": "Priya",
+      "verified": true,
+      "product": "dishwash-gel",
+      "product_label": "Dishwash gel"
+    },
+    {
+      "handle": "sunita-handwash",
+      "rating": 5,
+      "title": "Great product, great packaging",
+      "body": "Very soft on hands with a lovely fragrance, and it feels good to be using far less plastic.",
+      "author": "Sunita",
+      "verified": true,
+      "product": "hydrating-handwash",
+      "product_label": "Liquid handwash"
+    },
+    {
+      "handle": "rohit-floor",
+      "rating": 5,
+      "title": "Dog friendly",
+      "body": "We switched because chemical floor cleaners were setting off my dog's allergies. No reactions since.",
+      "author": "Rohit S.",
+      "verified": true,
+      "product": "herbal-floor-cleaner",
+      "product_label": "Floor cleaner"
+    },
+    {
+      "handle": "verified-tap",
+      "rating": 5,
+      "title": "Sparkling taps again",
+      "body": "Hard water had ruined our bathroom fittings. Two sprays and the scale wipes straight off, no scrubbing.",
+      "author": "Verified buyer",
+      "verified": true,
+      "product": "tap-cleaner-limescale-remover",
+      "product_label": "Tap cleaner"
+    }
+  ]
+}
