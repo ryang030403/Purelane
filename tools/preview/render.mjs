@@ -11,6 +11,7 @@ import { Liquid, Tag, Drop } from 'liquidjs';
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { chromeCss, chromeHtml } from './chrome.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const out = path.join(root, 'tools/preview/out');
@@ -241,7 +242,7 @@ const page = `<!doctype html>
   body { display: flex; flex-direction: column; min-height: 100%; margin: 0; font-size: 1.5rem;
     letter-spacing: .06rem; line-height: calc(1 + .8 / var(--font-body-scale)); font-family: system-ui; }
   @media screen and (min-width: 750px) { body { font-size: 1.6rem; } }
-  .preview-header { height: 90px; background: #fff; border-bottom: 1px solid #eee; display: flex; align-items: center; padding: 0 20px; font: 500 14px system-ui; color: #666; background: repeating-linear-gradient(135deg,#fff 0 12px,#f6f6f6 12px 24px); }
+  ${chromeCss}
 </style>
 <link rel="stylesheet" href="${rel('assets/base.css')}">
 ${head}
@@ -255,11 +256,25 @@ ${head}
 <script src="${rel('assets/global.js')}" defer></script>
 </head>
 <body class="gradient">
-<div class="preview-header">Local preview only &middot; Dawn&rsquo;s real header (logo, menu, cart) renders here on the store</div>
+${chromeHtml}
 <main id="MainContent" class="content-for-layout" role="main">
 ${html}
 </main>
 </body>
 </html>`;
 writeFileSync(path.join(out, 'index.html'), page);
+
+// Catalogue for the preview server's product pages and cart.
+const catalog = [...products.values()].map((p) => ({
+  handle: p.handle,
+  title: p.title,
+  price: p.price,
+  compare_at_price: p.compare_at_price,
+  available: p.available,
+  variant_id: p.selected_or_first_available_variant.id,
+  description: p.description,
+  image: p.featured_image && '/' + path.relative(root, path.join(out, p.featured_image.src)).split(path.sep).join('/'),
+  items: (p.metafields.custom.bundle_items?.value || []).map((i) => i.handle),
+}));
+writeFileSync(path.join(out, 'catalog.json'), JSON.stringify(catalog, null, 2));
 console.log(`wrote ${path.relative(root, path.join(out, 'index.html'))} (${Math.round(page.length / 1024)} KB)`);
