@@ -54,6 +54,36 @@ for (let i = 0; i < 60; i++) {
   names.push(await q(() => { const a = document.activeElement; return a.tagName + ':' + (a.getAttribute('aria-label') || a.textContent.trim().replace(/\s+/g, ' ').slice(0, 40)); }));
 }
 console.log('focus order sample:', names.slice(0, 60).join(' | '));
+// ---- theme editor simulation ----
+await page.mouse.move(5, 5); // earlier clicks left the cursor over the hero (a real hover hold)
+await q(() => { window.Shopify.designMode = true; window.scrollTo(0, 0); });
+const editor = await q(async () => {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const out = {};
+  // 1. Re-render: the editor swaps a section's HTML (old custom element disconnects, new one connects).
+  const wrap = document.querySelector('pl-hero').closest('.shopify-section');
+  const html = wrap.innerHTML;
+  wrap.innerHTML = html;
+  wrap.dispatchEvent(new CustomEvent('shopify:section:load', { bubbles: true, detail: { sectionId: wrap.id } }));
+  await wait(4200);
+  const slides = [...wrap.querySelectorAll('.pl-hslide')];
+  out.rerenderAutoplays = slides.findIndex((s) => s.classList.contains('is-on')) !== 0;
+  // 2. Selecting a slide block shows it and holds autoplay; deselect resumes.
+  slides[2].dispatchEvent(new CustomEvent('shopify:block:select', { bubbles: true, detail: { load: false } }));
+  await wait(4200);
+  out.blockSelectShowsSlide3 = slides[2].classList.contains('is-on');
+  slides[2].dispatchEvent(new CustomEvent('shopify:block:deselect', { bubbles: true }));
+  await wait(4200);
+  out.deselectResumes = !slides[2].classList.contains('is-on');
+  // 3. Selecting an off-screen combo scrolls the rail to it.
+  const rail = document.querySelector('[data-pl-rail]');
+  const last = rail.querySelector('.pl-combo:last-child');
+  last.dispatchEvent(new CustomEvent('shopify:block:select', { bubbles: true, detail: { load: true } }));
+  await wait(300);
+  out.railScrolledTo = rail.scrollLeft > 0;
+  return out;
+});
+console.log('editor simulation:', JSON.stringify(editor));
 console.log('errors:', errors.length ? errors : 'none');
 await browser.close();
 server.close();
