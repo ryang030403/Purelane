@@ -2,7 +2,7 @@
 // preloads, which the real storefront serves over https).
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
@@ -24,7 +24,13 @@ export function serve(port = 0) {
   });
 }
 
-if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
+// Run directly (npm run preview)? Compared case-insensitively: Windows
+// terminals may report the drive as c:\ or C:\.
+const self = fileURLToPath(import.meta.url).toLowerCase();
+if (process.argv[1] && path.resolve(process.argv[1]).toLowerCase() === self) {
   const { origin } = await serve(8377);
-  console.log(`${origin}/tools/preview/out/index.html  (prototype: ${origin}/reference/purelane-homepage.html)`);
+  console.log(`Preview running. Open:
+  ${origin}/tools/preview/out/index.html
+  ${origin}/reference/purelane-homepage.html (prototype)
+Leave this window open; Ctrl+C to stop.`);
 }
