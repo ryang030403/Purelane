@@ -241,7 +241,7 @@ const page = `<!doctype html>
   body { display: flex; flex-direction: column; min-height: 100%; margin: 0; font-size: 1.5rem;
     letter-spacing: .06rem; line-height: calc(1 + .8 / var(--font-body-scale)); font-family: system-ui; }
   @media screen and (min-width: 750px) { body { font-size: 1.6rem; } }
-  .preview-header { height: 90px; background: #fff; border-bottom: 1px solid #eee; display: flex; align-items: center; padding: 0 20px; font: 600 18px system-ui; }
+  .preview-header { height: 90px; background: #fff; border-bottom: 1px solid #eee; display: flex; align-items: center; padding: 0 20px; font: 500 14px system-ui; color: #666; background: repeating-linear-gradient(135deg,#fff 0 12px,#f6f6f6 12px 24px); }
 </style>
 <link rel="stylesheet" href="${rel('assets/base.css')}">
 ${head}
@@ -255,7 +255,7 @@ ${head}
 <script src="${rel('assets/global.js')}" defer></script>
 </head>
 <body class="gradient">
-<div class="preview-header">Dawn header</div>
+<div class="preview-header">Local preview only &middot; Dawn&rsquo;s real header (logo, menu, cart) renders here on the store</div>
 <main id="MainContent" class="content-for-layout" role="main">
 ${html}
 </main>
