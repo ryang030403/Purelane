@@ -1,0 +1,321 @@
+{% comment %}
+  Purelane best-selling combos: a swipeable rail of bundle cards.
+
+  Each block points at a real bundle product, so its title, price,
+  compare-at price, saving, stock and URL come from Shopify. What is in
+  the box comes from the product's custom.bundle_items metafield (list of
+  products); the count from custom.bundle_size, falling back to the
+  number of bundle items. Only merchandising extras live on the block.
+{% endcomment %}
+{{ 'pl-combos.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign heading_id = 'pl-combos-heading-' | append: section.id
+-%}
+
+<div
+  class="pl pl-sec pl-combos"
+  {% if section.settings.anchor != blank %}
+    id="{{ section.settings.anchor | handle }}"
+  {% endif %}
+  data-pl-scene="{{ section.settings.scene }}"
+>
+  <div class="pl-wrap">
+    {%- render 'pl-section-head',
+      kicker: section.settings.kicker,
+      heading: section.settings.heading,
+      heading_id: heading_id,
+      show_rule: section.settings.show_rule,
+      lede: section.settings.text,
+      class: 'pl-rv'
+    -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div
+        class="pl-comborail pl-rv"
+        data-pl-rail
+        role="region"
+        aria-labelledby="{{ heading_id }}"
+        tabindex="0"
+      >
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign bundle = block.settings.product
+            assign title_id = 'pl-combo-' | append: block.id
+          -%}
+          {%- if bundle == blank -%}
+            {%- if request.design_mode -%}
+              <div class="pl-combo pl-glass" {{ block.shopify_attributes }}>
+                <p class="pl-editor-note">{{ 'purelane.bundles.editor_empty' | t }}</p>
+              </div>
+            {%- endif -%}
+            {%- continue -%}
+          {%- endif -%}
+
+          {%- liquid
+            assign items = bundle.metafields.custom.bundle_items.value
+            assign size = bundle.metafields.custom.bundle_size.value | default: items.size | default: 1
+            assign captions = block.settings.captions | newline_to_br | split: '<br />'
+            assign summary = bundle.metafields.custom.summary.value
+            if summary == blank
+              assign summary = bundle.description | strip_html | truncatewords: 24
+            endif
+            assign on_sale = false
+            if bundle.compare_at_price > bundle.price
+              assign on_sale = true
+            endif
+          -%}
+          <article
+            class="pl-combo pl-glass pl-lift{% if block.settings.featured %} pl-is-featured{% endif %}"
+            aria-labelledby="{{ title_id }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="pl-combo__tray">
+              {%- if block.settings.badge_text != blank -%}
+                <span class="pl-combo__save">{{ block.settings.badge_text | escape }}</span>
+              {%- elsif on_sale -%}
+                {%- render 'pl-price',
+                  product: bundle,
+                  part: 'saving',
+                  save: 'amount',
+                  save_template: section.settings.save_badge,
+                  save_tag: 'span',
+                  save_class: 'pl-combo__save'
+                -%}
+              {%- endif -%}
+              {%- if block.settings.flag != blank -%}
+                <span class="pl-combo__flag">{{ block.settings.flag | escape }}</span>
+              {%- endif -%}
+
+              {%- if items.size > 0 -%}
+                <div class="pl-stack" role="list">
+                  {%- for item in items limit: 3 -%}
+                    {%- unless forloop.first -%}
+                      <span class="pl-stack__plus" aria-hidden="true">+</span>
+                    {%- endunless -%}
+                    {%- liquid
+                      assign caption = captions[forloop.index0] | strip
+                      if caption == blank
+                        assign caption = item.metafields.custom.benefit.value | default: item.title
+                      endif
+                    -%}
+                    <span class="pl-stack__it" role="listitem">
+                      {%- render 'pl-product-media',
+                        product: item,
+                        height: 66,
+                        class: 'pl-pimg pl-stack__img',
+                        tile_class: 'pl-stack__tile'
+                      -%}
+                      <span class="pl-stack__cap">{{ caption | escape }}</span>
+                    </span>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="pl-combo__body">
+              <h3 class="pl-combo__title" id="{{ title_id }}">
+                <a href="{{ bundle.url }}">{{ bundle.title | escape }}</a>
+              </h3>
+              <div class="pl-combo__cnt">{{ 'purelane.bundles.product_count' | t: count: size }}</div>
+              {%- if summary != blank -%}
+                <p class="pl-combo__inc">{{ summary | escape }}</p>
+              {%- endif -%}
+              <div class="pl-combo__prow">
+                {%- render 'pl-price',
+                  product: bundle,
+                  save: 'amount',
+                  save_template: section.settings.save_pill
+                -%}
+              </div>
+              {%- if section.settings.fine_print != blank -%}
+                <div class="pl-combo__fine">{{ section.settings.fine_print | escape }}</div>
+              {%- endif -%}
+              {%- if bundle.available -%}
+                <a
+                  class="pl-btn pl-btn--block {% if block.settings.featured %}pl-btn--primary{% else %}pl-btn--ghost{% endif %}"
+                  href="{{ bundle.url }}"
+                  aria-describedby="{{ title_id }}"
+                >
+                  {{- section.settings.button_label | escape -}}
+                  {% render 'pl-icon', name: 'arrow' %}
+                </a>
+              {%- else -%}
+                <button type="button" class="pl-btn pl-btn--ghost pl-btn--block" disabled aria-describedby="{{ title_id }}">
+                  {{- 'products.product.sold_out' | t -}}
+                </button>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.swipe_text != blank -%}
+        <div class="pl-swipecue" aria-hidden="true">
+          {%- render 'pl-icon', name: 'arrow' -%}
+          {{- section.settings.swipe_text | escape -}}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.note != blank -%}
+        <p class="pl-railnote">{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane combos",
+  "tag": "section",
+  "class": "pl-section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Pre-built to save you money"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Best selling combos"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rule",
+      "label": "Show leaf divider",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own."
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "text",
+      "id": "save_badge",
+      "label": "Saving badge",
+      "info": "Top of each card. [saving] is replaced with the calculated amount.",
+      "default": "You save [saving]"
+    },
+    {
+      "type": "text",
+      "id": "save_pill",
+      "label": "Saving next to price",
+      "info": "[saving] is replaced with the calculated amount.",
+      "default": "Save [saving]"
+    },
+    {
+      "type": "text",
+      "id": "fine_print",
+      "label": "Fine print",
+      "default": "Inclusive of all taxes · COD available"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop bundle"
+    },
+    {
+      "type": "header",
+      "content": "Below the rail"
+    },
+    {
+      "type": "text",
+      "id": "swipe_text",
+      "label": "Swipe hint",
+      "info": "Leave empty to hide.",
+      "default": "Swipe for more combos"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "info": "Leave empty to hide.",
+      "default": "Tapping \"Shop bundle\" opens the bundle picker with these products already added. You can still swap anything before you pay."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor",
+      "info": "Lets menus link here, e.g. /#combos.",
+      "default": "combos"
+    },
+    {
+      "type": "select",
+      "id": "scene",
+      "label": "Background depth",
+      "info": "Needs the Purelane backdrop section.",
+      "options": [
+        { "value": "1", "label": "Surface" },
+        { "value": "2", "label": "Shallow" },
+        { "value": "3", "label": "Deep" },
+        { "value": "4", "label": "Deepest" }
+      ],
+      "default": "3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combo",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Bundle product",
+          "info": "Price, stock and link come from this product. Its \"Bundle items\" metafield sets what is shown in the box."
+        },
+        {
+          "type": "text",
+          "id": "flag",
+          "label": "Corner flag",
+          "info": "e.g. Most popular. Leave empty to hide."
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Saving badge override",
+          "info": "e.g. Biggest saving. Leave empty to show the calculated saving."
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Highlight this card",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "captions",
+          "label": "Item captions",
+          "info": "Optional, one line per item in the box. Empty lines use the product's \"Benefit\" metafield."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane combos",
+      "blocks": [
+        { "type": "combo", "settings": { "flag": "Most popular" } },
+        { "type": "combo" },
+        { "type": "combo", "settings": { "flag": "Best value", "badge_text": "Biggest saving", "featured": true } },
+        { "type": "combo" },
+        { "type": "combo" }
+      ]
+    }
+  ]
+}
+{% endschema %}
