@@ -54,6 +54,15 @@
   }
 }
 
+/* Dawn gets border-box via an inline rule in theme.liquid; the sections do
+   not rely on that. */
+.pl,
+.pl *,
+.pl *::before,
+.pl *::after {
+  box-sizing: border-box;
+}
+
 /* Reset Dawn's element defaults inside our scope only. :where() keeps this at
    single-class weight so component rules always win. */
 .pl :where(h1, h2, h3, h4, h5, h6, p, ul, ol, figure, blockquote) {
