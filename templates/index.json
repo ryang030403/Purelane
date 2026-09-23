@@ -1,75 +1,233 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "backdrop": {
+      "type": "pl-backdrop",
+      "settings": {
+        "water": true,
+        "bubbles": true,
+        "parallax": true
+      }
+    },
+    "hero": {
+      "type": "pl-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide_single": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "products": ["kitchen-cleaner-foaming"],
+            "product": "kitchen-cleaner-foaming",
+            "label": "Single bottle",
+            "saving": "percent",
+            "saving_label": "[saving] off"
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide_two": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "products": ["tap-cleaner-limescale-remover", "kitchen-cleaner-foaming"],
+            "product": "any-2-products-box",
+            "label": "Any 2 products",
+            "saving": "amount",
+            "saving_label": "Save [saving]"
+          }
+        },
+        "slide_three": {
+          "type": "slide",
+          "settings": {
+            "products": ["tap-cleaner-limescale-remover", "kitchen-cleaner-foaming", "copper-bronze-brass-cleaner"],
+            "product": "any-3-products-box",
+            "label": "Any 3 products",
+            "saving": "amount",
+            "saving_label": "Save [saving]"
+          }
+        },
+        "badge_plant": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "label": "Plant\npowered",
+            "mobile_label": "Plant powered"
+          }
+        },
+        "badge_safe": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "label": "Safe for\nkids & pets",
+            "mobile_label": "Kids & pet safe"
+          }
+        },
+        "badge_zero": {
+          "type": "badge",
+          "settings": {
+            "icon": "ban",
+            "label": "Zero harsh\nchemicals",
+            "mobile_label": "Zero harsh chem"
           }
         }
       },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+      "block_order": ["slide_single", "slide_two", "slide_three", "badge_plant", "badge_safe", "badge_zero"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "heading": "Clean\nThat",
+        "heading_accent": "Lasts",
+        "heading_tag": "h1",
+        "show_rule": true,
+        "text": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.",
+        "button_label_1": "Shop now",
+        "button_link_1": "#shop",
+        "button_label_2": "How it works",
+        "button_link_2": "#bundles",
+        "stage_label": "Bundle offers",
+        "interval": 3.8,
+        "badges_label": "Product promises",
+        "gap_top": 52,
+        "scene": "1"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "reviews": {
+      "type": "pl-reviews",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
+        "kicker": "That's what they said",
+        "show_stars": true,
+        "summary_1": "<b>4.8</b> from 8,000+ reviews",
+        "summary_2": "Loved by <b>12 lakh+</b> homes",
+        "limit": 10,
+        "anchor": "reviews",
+        "scene": "1"
+      }
+    },
+    "combos": {
+      "type": "pl-combos",
+      "blocks": {
+        "kitchen": {
+          "type": "combo",
+          "settings": {
+            "product": "kitchen-essentials-combo",
+            "flag": "Most popular",
+            "badge_text": "",
+            "featured": false,
+            "captions": ""
+          }
+        },
+        "laundry": {
+          "type": "combo",
+          "settings": {
+            "product": "laundry-care-bundle",
+            "flag": "",
+            "badge_text": "",
+            "featured": false,
+            "captions": ""
+          }
+        },
+        "complete": {
+          "type": "combo",
+          "settings": {
+            "product": "complete-home-bundle",
+            "flag": "Best value",
+            "badge_text": "Biggest saving",
+            "featured": true,
+            "captions": ""
+          }
+        },
+        "bathroom": {
+          "type": "combo",
+          "settings": {
+            "product": "bathroom-deep-clean-combo",
+            "flag": "",
+            "badge_text": "",
+            "featured": false,
+            "captions": ""
+          }
+        },
+        "hard_water": {
+          "type": "combo",
+          "settings": {
+            "product": "hard-water-solution-kit",
+            "flag": "",
+            "badge_text": "",
+            "featured": false,
+            "captions": "\nFights limescale in the bowl"
+          }
+        }
+      },
+      "block_order": ["kitchen", "laundry", "complete", "bathroom", "hard_water"],
+      "settings": {
+        "kicker": "Pre-built to save you money",
+        "heading": "Best selling combos",
+        "show_rule": true,
+        "text": "Swipe through the boxes people order most. Each one is already priced below buying the same products on their own.",
+        "save_badge": "You save [saving]",
+        "save_pill": "Save [saving]",
+        "fine_print": "Inclusive of all taxes · COD available",
+        "button_label": "Shop bundle",
+        "swipe_text": "Swipe for more combos",
+        "note": "Tapping \"Shop bundle\" opens the bundle picker with these products already added. You can still swap anything before you pay.",
+        "anchor": "combos",
+        "scene": "3"
+      }
+    },
+    "bundles": {
+      "type": "pl-bundles",
+      "blocks": {
+        "starter": {
+          "type": "tier",
+          "settings": {
+            "product": "any-2-products-box",
+            "tag": "Starter",
+            "featured": false,
+            "features": "Pick any two products\nFree shipping across India",
+            "button_label": "Build this box",
+            "button_link": "#shop"
+          }
+        },
+        "popular": {
+          "type": "tier",
+          "settings": {
+            "product": "any-3-products-box",
+            "tag": "Most popular",
+            "featured": true,
+            "features": "Pick any three products\nCovers kitchen and laundry\nFree shipping across India",
+            "button_label": "Build this box",
+            "button_link": "#shop"
+          }
+        },
+        "whole_home": {
+          "type": "tier",
+          "settings": {
+            "product": "any-5-products-box",
+            "tag": "Whole home",
+            "featured": false,
+            "features": "Pick any five products\nEvery room in one order\nFree shipping across India",
+            "button_label": "Build this box",
+            "button_link": "#shop"
+          }
+        }
+      },
+      "block_order": ["starter", "popular", "whole_home"],
+      "settings": {
+        "kicker": "Build your bundle",
+        "heading": "One box. Every room.",
+        "text": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way.",
+        "qty_label": "Products",
+        "per_item": "Flat [price] per product",
+        "anchor": "bundles",
+        "scene": "3"
+      }
+    },
+    "shop": {
+      "type": "pl-product-grid",
+      "settings": {
+        "kicker": "Bestsellers",
+        "heading": "Loved by 30,000 homes",
+        "show_rule": true,
+        "collection": "bestsellers",
         "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "show_rating": true,
+        "saving_label": "[saving] off",
+        "anchor": "shop",
+        "scene": "3"
       }
     }
   },
-  "order": [
-    "image_banner",
-    "featured_collection"
-  ]
+  "order": ["backdrop", "hero", "reviews", "combos", "bundles", "shop"]
 }
