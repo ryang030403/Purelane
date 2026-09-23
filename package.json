@@ -1,0 +1,16 @@
+{
+  "name": "purelane-theme",
+  "private": true,
+  "description": "Purelane homepage sections on Shopify Dawn. Tooling only; nothing here is uploaded to Shopify.",
+  "type": "module",
+  "scripts": {
+    "extract": "node tools/extract-prototype-assets.mjs",
+    "seed:images": "node tools/rasterize-seed-images.mjs",
+    "seed": "node store-seed/seed.mjs",
+    "check": "node tools/theme-check.mjs"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@shopify/theme-check-node": "^3.29.0"
+  }
+}
