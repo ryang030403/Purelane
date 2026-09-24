@@ -63,11 +63,51 @@ for (const width of [1440, 375]) {
     }
     const sel = `.pl-shelf > li:nth-child(${card.i + 1}) button[type=submit]`;
     await page.$eval(sel, (b) => b.scrollIntoView({ block: 'center' }));
-    await Promise.all([page.waitForNavigation({ timeout: 15000 }), page.click(sel)]);
+    const countBefore = await headerCount(page);
+    await page.click(sel);
+    // Like Dawn's cart drawer: stay on the page, slide the cart in.
+    await page.waitForSelector('cart-drawer.is-open .pv-added', { timeout: 10000 });
     added++;
-    const cart = await cartJs(page);
-    const line = cart.items.find((l) => l.product_title === card.title);
-    check(page.url().endsWith('/cart') && !!line, `add to cart: "${card.title.slice(0, 32)}"`, `cart now ${cart.item_count} item(s)`);
+    const msg = await page.$eval('.pv-added', (e) => e.textContent.trim());
+    const countAfter = await headerCount(page);
+    const stayed = page.url().startsWith(HOME);
+    check(
+      stayed && msg.includes(card.title) && countAfter === countBefore + 1,
+      `add to cart: "${card.title.slice(0, 32)}" -> drawer on the same page`,
+      `${msg.slice(0, 60)}… | header ${countBefore}->${countAfter}`
+    );
+    await new Promise((r) => setTimeout(r, 400)); // let the drawer finish sliding in
+    await page.click('cart-drawer [data-continue]');
+    await page.waitForFunction(() => !document.querySelector('cart-drawer').classList.contains('is-open'));
+  }
+  // Header cart link opens the drawer too; "View cart" goes to the full cart page (the backup).
+  await page.goto(HOME, { waitUntil: 'load' });
+  // Click like a finger: the link must be the topmost element at its centre.
+  const pt = await page.$eval('#cart-icon-bubble', (a) => {
+    const r = a.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    return { x, y, hit: a.contains(document.elementFromPoint(x, y)) };
+  });
+  check(pt.hit, 'header "Cart" link is visible and not covered');
+  await page.mouse.click(pt.x, pt.y);
+  await page.waitForSelector('cart-drawer.is-open .pv-lines');
+  const drawerLines = await page.$$eval('cart-drawer .pv-lines li', (l) => l.length);
+  check(drawerLines === added, 'header "Cart" opens the drawer with every item', `${drawerLines} lines`);
+  await page.keyboard.press('Escape');
+  check(!(await page.$eval('cart-drawer', (d) => d.classList.contains('is-open'))), 'Escape closes the drawer');
+  // Clicking the dimmed page beside the drawer closes it (overlay must really cover the page).
+  await page.mouse.click(pt.x, pt.y);
+  await page.waitForSelector('cart-drawer.is-open');
+  await new Promise((r) => setTimeout(r, 400));
+  const ov = await page.$eval('.pv-overlay', (o) => { const r = o.getBoundingClientRect(); return { w: r.width, h: r.height }; });
+  check(ov.w > 0 && ov.h > 0, 'page behind the drawer is dimmed', `overlay ${ov.w}x${ov.h}`);
+  if (width > 500) {
+    await page.mouse.click(20, 400);
+    await new Promise((r) => setTimeout(r, 400));
+    check(!(await page.$eval('cart-drawer', (d) => d.classList.contains('is-open'))), 'clicking outside closes the drawer');
+  } else {
+    await page.keyboard.press('Escape');
   }
   await page.goto(`${origin}/cart`, { waitUntil: 'load' });
   check((await headerCount(page)) === added, `header count matches cart`, `${await headerCount(page)} = ${added}`);

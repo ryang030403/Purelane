@@ -18,7 +18,9 @@ Build notes, what was flagged in the original file, and the AI workflow notes ar
 
 ## What changed in Dawn
 
-Two lines. `layout/theme.liquid` renders `snippets/pl-head.liquid` before `</head>`. Everything
+Two lines. `layout/theme.liquid` renders `snippets/pl-head.liquid` before `</head>`. One
+theme setting also changed: *Cart type* is *Drawer* (was *Popup notification*), so Add to cart keeps
+shoppers on the page. Everything
 else is new `pl-*` files, plus a `purelane.*` block in `locales/en.default.json` and the homepage
 template. The first commit is byte-identical to upstream Dawn v16.0.0, so `git diff 1f18434`
 shows the whole build.
@@ -102,8 +104,9 @@ npm run behaviour   # motion on: reveal, slideshow, marquee, CLS, focus order, e
 ```
 
 The preview renders the real section files with LiquidJS and the seed data. A small local server
-stands in for the Shopify pages the sections link to: a header with a cart count, product pages
-and a working cart. On the store, Dawn's header, product pages and cart drawer take their place.
+stands in for the Shopify pages the sections link to: a header with a cart count, a cart drawer
+that Dawn's own add-to-cart code opens, product pages and a cart page. On the store, Dawn's
+header, product pages and cart drawer take their place.
 It is a harness, not Shopify; the dev store is the real test (see the gaps in NOTES.md).
 
 If `npm run preview` says the port is in use, an older preview is still running. Close that
