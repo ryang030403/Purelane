@@ -1,0 +1,13 @@
+# Only the theme is uploaded to Shopify. Tooling, docs and the design
+# reference stay in the repo.
+docs/*
+reference/*
+store-seed/*
+tools/*
+node_modules/*
+package.json
+package-lock.json
+README.md
+NOTES.md
+LICENSE.md
+release-notes.md
