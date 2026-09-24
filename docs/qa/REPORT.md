@@ -10,12 +10,35 @@ npm run e2e                                     # click-through: cart, bundles, 
 QA_BEFORE=<checkout of c332441> npm run qa      # this report's images + results.json
 ```
 
-**Scope, stated plainly:** these checks run the real section files through a local Liquid renderer
-(LiquidJS) with the seed data, inside Dawn's own CSS. They show the build matches the prototype and
-behaves correctly. They do not replace a run on a Shopify store, where the cart, product pages,
-theme editor and Lighthouse get tested for real.
+**Scope:** the local checks run the real section files through LiquidJS with the seed data, inside
+Dawn's own CSS, to compare against the prototype pixel by pixel. The live-store check below then
+runs against the real Shopify store.
 
-## Results
+## Live store
+
+The theme is live on the dev store, **https://purelane-ryan.myshopify.com** (password in the
+submission email), seeded with `npm run seed`. `npm run live-check` ran against it at 1440 and 375px:
+**34 of 34 checks passed.** It confirmed:
+
+- Purelane is the live theme.
+- All five sections render with store data: 3 price slides, 5 reviews from the metaobject, 5 combos
+  with their 14 items, 3 tiers with ₹174 / ₹166 / ₹160 per product, 8 grid products with ratings
+  from the standard review metafields.
+- The sold-out and no-image products render as designed, and every image loads.
+- Add to cart opens Dawn's cart drawer on the same page and updates the header count; the drawer
+  has checkout.
+- Shopify checkout refuses the sold-out product (its stock-problems page).
+- All 5 "Shop bundle" product pages open, and there are no theme script errors.
+
+| Desktop | Mobile |
+|---|---|
+| ![](img/live-1440-top.jpg) | ![](img/live-375-top.jpg) |
+| ![](img/live-1440-cart-drawer.jpg) | ![](img/live-375-cart-drawer.jpg) |
+| ![](img/live-1440-combos.jpg) | ![](img/live-375-bundles.jpg) |
+
+![](img/live-1440-shop.jpg)
+
+## Results (local harness)
 
 | Check | Result |
 |---|---|
