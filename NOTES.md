@@ -81,6 +81,11 @@ Behaviour checks (`tools/preview/behaviour.mjs`, motion on) cover:
 - **Real cart.** Grid cards use Dawn's own `<product-form>`, so the drawer, count and errors
   behave like the rest of the theme. Sold out gives a disabled button. Multi-variant products
   get a "Choose options" link. Buttons are labelled with the product name.
+- **Add to cart keeps shoppers on the page.** The theme's cart type is set to Dawn's built-in
+  *Drawer* (Dawn ships with *Popup notification*). Adding from the grid slides in the cart with
+  the item, count, subtotal and checkout, and the header cart count updates, with no page change.
+  It is a Dawn theme setting, not new UI, so it stays within "a build, not a redesign" and the
+  merchant can switch it back under *Theme settings → Cart*.
 - **Merchant-editable.** All copy, labels, saving templates (`Save [saving]`), anchors, the
   slide interval and the background depth are settings. Slides, badges, combos and tiers are
   blocks. Reviews are picked and ordered with a metaobject picker.
