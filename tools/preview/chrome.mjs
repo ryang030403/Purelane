@@ -87,7 +87,8 @@ export const chromeHtml = `
       this.panel = this.querySelector('.pv-drawer');
       this.body = this.querySelector('[data-body]');
       this.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => this.close()));
-      this.addEventListener('keydown', (e) => e.key === 'Escape' && this.close());
+      // Escape closes an open drawer wherever focus is (not only once focus has moved inside).
+      document.addEventListener('keydown', (e) => e.key === 'Escape' && this.classList.contains('is-open') && this.close());
       // Like Dawn: the header cart link opens the drawer (the /cart page stays as the fallback).
       const link = document.getElementById('cart-icon-bubble');
       if (link && location.pathname !== '/cart') link.addEventListener('click', (e) => { e.preventDefault(); this.refresh(null, link); });

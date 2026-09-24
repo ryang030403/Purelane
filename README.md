@@ -31,7 +31,7 @@ In a second terminal, run the checks. Each one renders the sections from the rep
 
 ```sh
 npm run check        # Shopify theme-check
-npm run e2e          # clicks every button: add to cart, cart drawer, bundles, links (74 checks)
+npm run e2e          # clicks every button: add to cart, cart drawer, bundles, links (77 checks)
 npm run compare      # prototype vs build at 375 / 768 / 1024 / 1440
 npm run behaviour    # animations, pause controls, theme-editor events, layout shift
 ```
