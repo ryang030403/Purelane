@@ -15,7 +15,8 @@
     "compare": "node tools/preview/render.mjs && node tools/preview/compare.mjs",
     "behaviour": "node tools/preview/render.mjs && node tools/preview/behaviour.mjs",
     "qa": "node tools/preview/render.mjs && node tools/preview/qa.mjs",
-    "e2e": "node tools/preview/render.mjs && node tools/preview/e2e.mjs"
+    "e2e": "node tools/preview/render.mjs && node tools/preview/e2e.mjs",
+    "live-check": "node tools/live-check.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
