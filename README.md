@@ -3,6 +3,8 @@
 The Purelane prototype homepage (`reference/purelane-homepage.html`) rebuilt as production
 sections on stock Dawn v16.0.0:
 
+**Live store:** https://purelane-ryan.myshopify.com (password in the submission email).
+
 | # | Section | File | Anchor |
 |---|---|---|---|
 | 01 | Hero | `sections/pl-hero.liquid` | – |

@@ -123,10 +123,11 @@ Behaviour checks (`tools/preview/behaviour.mjs`, motion on) cover:
 
 ## Gaps, stated plainly
 
-- **It has not been run on a real store yet.** Everything above was verified with a local
-  LiquidJS renderer that shims Shopify's tags and filters. `store-seed/seed.mjs` is written against
-  Admin API 2025-10 but has not been executed. The first `shopify theme push` + seed run is where
-  something could still break.
+- **Verified on a real store, with one area left to people.** The theme is live on the dev store,
+  seeded by `store-seed/seed.mjs`, and `npm run live-check` passes there (34/34, desktop and
+  mobile, including Dawn's cart drawer and Shopify checkout refusing the sold-out product). The
+  theme editor was exercised with simulated editor events locally, and should also be tried
+  by hand. Lighthouse hasn't been run on the live store.
 - **"Pick any N" is an offer, not yet a mechanic.** Tiers are products carrying the right price,
   but choosing the N products needs a bundle builder (a Shopify Bundles app or a Cart Transform
   Function). "Build this box" links to the grid in the meantime.
@@ -173,7 +174,8 @@ against the prototype or the rule was checked in Dawn's source.
   The history was rebuilt, verified by matching upstream's tree hash, and `.gitattributes` was
   added.
 - **Platform knowledge it didn't have:**
-  - Dawn hides `div:empty` (would have deleted the backdrop layers).
+  - Dawn hides `div:empty` (would have deleted the backdrop layers, and later hid the preview's
+    cart-drawer overlay).
   - Dawn sets `box-sizing` in an inline style, not `base.css` (the first comparison showed every
     box 36px off).
   - Dawn's `--header-height` is set late (would have caused layout shift).
@@ -185,6 +187,10 @@ against the prototype or the rule was checked in Dawn's source.
 - **Tooling:** headless Chrome took 90s+ per screenshot because pausing animations with injected
   CSS forces software re-rasterising of blended, blurred layers; background tabs never produce
   frames. Emulating `prefers-reduced-motion` (which both pages honour) made a full run 22s.
+
+- **Real store:** Shopify's cart API now accepts a sold-out variant (checkout rejects it), so the
+  first live test expected the wrong thing. Dawn also tucks the storefront password field into a
+  modal on small screens, which broke the automated login until the form was submitted directly.
 
 **What I'd systematise for twenty more:**
 
