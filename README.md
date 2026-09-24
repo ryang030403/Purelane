@@ -16,6 +16,28 @@ Build notes, what was flagged in the original file, and the AI workflow notes ar
 **[NOTES.md](NOTES.md)**. Test results with screenshots and before/after evidence are in
 **[docs/qa/REPORT.md](docs/qa/REPORT.md)**.
 
+## Quick start
+
+Needs Node 18+ and Chrome, Edge or Chromium (for the automated checks).
+
+```sh
+git clone https://github.com/ryang030403/Purelane.git
+cd Purelane
+npm install
+npm run preview      # open http://127.0.0.1:8377/  (keep the terminal open)
+```
+
+In a second terminal, run the checks. Each one renders the sections from the repo first:
+
+```sh
+npm run check        # Shopify theme-check
+npm run e2e          # clicks every button: add to cart, cart drawer, bundles, links (74 checks)
+npm run compare      # prototype vs build at 375 / 768 / 1024 / 1440
+npm run behaviour    # animations, pause controls, theme-editor events, layout shift
+```
+
+To put it on a Shopify store instead, see [Setup](#setup) below.
+
 ## What changed in Dawn
 
 Two lines. `layout/theme.liquid` renders `snippets/pl-head.liquid` before `</head>`. One

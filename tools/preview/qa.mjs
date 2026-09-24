@@ -4,12 +4,12 @@
 // tools/preview folder, e.g. `git worktree add ../before c332441`).
 //
 //   node tools/preview/render.mjs && QA_BEFORE=../before node tools/preview/qa.mjs
-import puppeteer from 'puppeteer-core';
 import { PNG } from 'pngjs';
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { serve } from './serve.mjs';
+import { launch } from './browser.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const out = path.join(root, 'docs/qa/img');
@@ -26,12 +26,7 @@ const BUILD = `${origin}/tools/preview/out/index.html`;
 const PROTO = `${origin}/reference/purelane-homepage.html`;
 const OLD = before && `${before.origin}/tools/preview/out/index.html`;
 
-const browser = await puppeteer.launch({
-  executablePath: ['C:/Program Files/Google/Chrome/Application/chrome.exe', '/usr/bin/google-chrome'].find(existsSync),
-  headless: true,
-  protocolTimeout: 300000,
-  args: ['--hide-scrollbars'],
-});
+const browser = await launch();
 
 async function open(url, width, { motion = false, height = 1000, init } = {}) {
   const page = await browser.newPage();

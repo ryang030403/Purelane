@@ -1,17 +1,12 @@
 // End-to-end click-through of the preview, as a shopper would do it.
 // Every assertion prints PASS/FAIL; exits 1 on any failure.
 //   npm run e2e
-import puppeteer from 'puppeteer-core';
-import { existsSync } from 'node:fs';
 import { serve } from './serve.mjs';
+import { launch } from './browser.mjs';
 
 const { server, origin } = await serve();
 const HOME = `${origin}/tools/preview/out/index.html`;
-const browser = await puppeteer.launch({
-  executablePath: ['C:/Program Files/Google/Chrome/Application/chrome.exe', '/usr/bin/google-chrome'].find(existsSync),
-  headless: true,
-  protocolTimeout: 300000,
-});
+const browser = await launch();
 
 let failures = 0;
 const check = (ok, label, detail = '') => {

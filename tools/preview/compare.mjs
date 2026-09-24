@@ -4,23 +4,18 @@
 //
 //   node tools/preview/render.mjs && node tools/preview/compare.mjs
 //   -> tools/preview/out/compare/report.md + PNGs
-import puppeteer from 'puppeteer-core';
 import { PNG } from 'pngjs';
-import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { serve } from './serve.mjs';
+import { launch } from './browser.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const outDir = path.join(root, 'tools/preview/out/compare');
 mkdirSync(outDir, { recursive: true });
 
-const browserPath = [
-  'C:/Program Files/Google/Chrome/Application/chrome.exe',
-  'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
-  '/usr/bin/google-chrome',
-  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-].find(existsSync);
+
 
 const { server, origin } = await serve();
 const PROTO = `${origin}/reference/purelane-homepage.html`;
@@ -55,12 +50,7 @@ const pairs = [
 // backdrop-filter glass: 90s+ per capture.
 const HIDE_CHROME = '.ticker, header, .rail, .sticky, .preview-header, .pv-bar { display: none !important; }';
 
-const browser = await puppeteer.launch({
-  executablePath: browserPath,
-  headless: true,
-  protocolTimeout: 600000,
-  args: ['--hide-scrollbars'],
-});
+const browser = await launch({ protocolTimeout: 600000 });
 
 async function open(url, width) {
   const page = await browser.newPage();

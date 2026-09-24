@@ -2,10 +2,10 @@
 // defined, reveal, slideshow timing / pause / dots, marquee loop period and
 // hidden duplicates, scene switching, keyboard order, console errors.
 //   node tools/preview/render.mjs && node tools/preview/behaviour.mjs
-import puppeteer from 'puppeteer-core';
 import { serve } from './serve.mjs';
+import { launch } from './browser.mjs';
 const { server, origin } = await serve();
-const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: true, protocolTimeout: 180000, args: ['--hide-scrollbars'] });
+const browser = await launch();
 const page = await browser.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
