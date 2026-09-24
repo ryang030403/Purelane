@@ -36,6 +36,12 @@ npm run compare      # prototype vs build at 375 / 768 / 1024 / 1440
 npm run behaviour    # animations, pause controls, theme-editor events, layout shift
 ```
 
+Against the real store (sections, images, cart drawer, checkout, sold out, at 1440 and 375px):
+
+```sh
+STORE_URL=https://purelane-ryan.myshopify.com STORE_PASSWORD=... npm run live-check
+```
+
 To put it on a Shopify store instead, see [Setup](#setup) below.
 
 ## What changed in Dawn
